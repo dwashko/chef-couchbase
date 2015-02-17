@@ -13,6 +13,7 @@ class Chef
         @current_resource.knownNodes @new_resource.knownNodes
         @current_resource.username @new_resource.username
         @current_resource.password @new_resource.password
+        @current_resource.clusterip @new_resource.clusterip
 
       end
       

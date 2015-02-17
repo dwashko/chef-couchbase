@@ -2,13 +2,14 @@
 # Cookbook Name:: couchbase
 # Recipe:: xdcr
 #
-remote_cluster_name = "west_cluster"
-src_cluster_name ="east_cluster"
 
-src_cluster = search(:node, "role:#{src_cluster_name}")
+src_cluster_name = node['couchbase']['server']['cluster_name']
+remote_cluster_name = node['couchbase']['server']['remote_cluster']
+
+src_cluster = search(:node, "couchbase:#{src_cluster_name}")
 src_node=src_cluster[0]["ipaddress"]
 
-remote_cluster = search(:node, "role:#{remote_cluster_name}")
+remote_cluster = search(:node, "couchbase:#{remote_cluster_name}")
 remote_node=remote_cluster[0]["ipaddress"]
 
 username = node['couchbase']['server']['username']

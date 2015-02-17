@@ -22,6 +22,10 @@ class Chef
         set_or_return(:password, arg, :kind_of => String, :name_attribute => true)
       end
 
+      def clusterip(arg=nil)
+        set_or_return(:clusterip, arg, :kind_of => String, :name_attribute => true)
+      end
+
       def initialize(*)
         super
         @action = :rebalance

@@ -11,7 +11,8 @@ class Chef
         @current_resource = Resource::AddNode.new @new_resource.name
         @current_resource.username @new_resource.username
         @current_resource.password @new_resource.password
-	@current_resource.hostname @new_resource.hostname
+        @current_resource.hostname @new_resource.hostname
+        @current_resource.clusterip @new_resource.clusterip
 
       end
 
@@ -24,10 +25,17 @@ class Chef
 #      end
       
       def action_add_node_only
-	  post "/controller/addNode", create_params
-          @new_resource.updated_by_last_action true
-          Chef::Log.info "#{@new_resource} modified"
-      end        
+      begin
+        Chef::Log.info ("value of clusterip is " + new_resource.clusterip); 
+
+          post "/controller/addNode", create_params
+              @new_resource.updated_by_last_action true
+              Chef::Log.info "#{@new_resource} modified"
+          end        
+
+          rescue SystemCallError
+            Chef::Log "error adding node is " +$!
+      end
 
       def create_params
         {

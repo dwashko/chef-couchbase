@@ -42,7 +42,7 @@ else
   default['couchbase']['server']['log_dir'] = "#{node['couchbase']['server']['install_dir']}/var/lib/couchbase/logs"
 end
 
-default['source']['bucket'] = "default"
-default['remote']['bucket'] = "default"
-default['cluster_name'] = "west_cluster"
-default['remote_cluster'] = "remote_cluster"
+default['couchbase']['server']['source']['bucket'] = "default"
+default['couchbase']['server']['remote']['bucket'] = "default"
+default['couchbase']['server']['cluster_name'] = "west_cluster"
+default['couchbase']['server']['remote_cluster'] = "remote_cluster"
