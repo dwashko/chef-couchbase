@@ -6,17 +6,31 @@
 src_cluster_name = node['couchbase']['server']['cluster_name']
 remote_cluster_name = node['couchbase']['server']['remote_cluster']
 
-src_cluster = search(:node, "couchbase:#{src_cluster_name}")
+if Chef::Config[:solo]
+    Chef::Log.warn("This recipe uses search, chef solo does not support search.")
+else
+    src_cluster = search(:node, "couchbase:#{src_cluster_name}")
+end
+
 src_node=src_cluster[0]["ipaddress"]
 
-remote_cluster = search(:node, "couchbase:#{remote_cluster_name}")
+if Chef::Config[:solo]
+    Chef::Log.warn("This recipe uses search, chef solo does not support search.")
+else
+    remote_cluster = search(:node, "couchbase:#{remote_cluster_name}")
+end
 remote_node=remote_cluster[0]["ipaddress"]
 
 username = node['couchbase']['server']['username']
 password = node['couchbase']['server']['password']
 
 Chef::Log.info "Get uuid information of the remote cluster"
-s_uuid = `curl 'http://#{username}:#{password}@#{remote_node}:8091/pools' | python -mjson.tool |sed -e 's/[","]/''/g' | awk -F "uuid: " '{print $2}'`
+#foodcritic complained about this, not sure this is proper but it has not broke my testing yet.
+#s_uuid = `curl 'http://#{username}:#{password}@#{remote_node}:8091/pools' | python -mjson.tool |sed -e 's/[","]/''/g' | awk -F "uuid: " '{print $2}'`
+s_uuid = Mixlib::ShellOut.new("curl 'http://#{username}:#{password}@#{remote_node}:8091/pools' | python -mjson.tool |sed -e 's/[\",\"]/''/g' | awk -F \"uuid: \" '{print $2}'")
+s_uuid run_command
+s_uuid error!
+
 uuid= s_uuid.strip
 
 xdcr_ref "Create XDCR Replication reference  " do

@@ -16,12 +16,17 @@ else
   Chef::Log.info( "else - if statement is false  node ipaddress is '#{node["ipaddress"]}' while selfipaddress is '#{selfipaddress}'" )
 end
 
-cluster = search(:node, "role:#{cluster_name}")
+# for vagrant testing set and attribute vagrant = true in your role or Vagrant file.
+if Chef::Config[:solo] && !node['vagrant']
+    Chef::Log.warn("This recipe uses search and Chef solo does not support search.")
+else
+    cluster = search(:node, "role:#{cluster_name}")
+end
 
 target=node_to_join(cluster,selfipaddress,node['couchbase']['server']['username'],node['couchbase']['server']['password'])
 
 if target then
-    add_node "#{cluster_name}" do
+    add_node cluster_name do
         hostname node["ipaddress"]
         username node['couchbase']['server']['username']
         password node['couchbase']['server']['password']

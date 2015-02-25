@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 default['couchbase']['server']['edition'] = "community"
 default['couchbase']['server']['version'] = "3.0.1"
 
@@ -5,9 +6,9 @@ default['couchbase']['server']['username'] = "Administrator"
 default['couchbase']['server']['password'] = "password"
 
 default['couchbase']['server']['memory_quota_mb'] = 4000
-#default['couchbase']['server']['memory_quota_mb'] = Couchbase::MaxMemoryQuotaCalculator.from_node(node).in_megabytes
+# default['couchbase']['server']['memory_quota_mb'] = Couchbase::MaxMemoryQuotaCalculator.from_node(node).in_megabytes
 
-#only supports version 3.0.0 and higher due to file name changes for package_file
+# only supports version 3.0.0 and higher due to file name changes for package_file
 case node['platform']
 when "debian"
   package_machine = node['kernel']['machine'] == "x86_64" ? "amd64" : "x86"
