@@ -52,17 +52,17 @@ def get_timestamp(jvalue)
   timestamp
 end
 
-def join_to_cluster(jvalue, selfipaddress, clusterip)
+def join_to_cluster(jvalue, selfipaddress)
   return unless not_in_cluster(jvalue, selfipaddress)
-  joinarray = {}
   clusternodes = get_known_nodes_from_json(jvalue)
   joinarray['knownnodes'] = "ns_1@#{selfipaddress}" + clusternodes
-  joinarray['nodetojoin'] = clusterip
+  joinarray['nodetojoin'] = node['ipaddress']
   joinarray
 end
 
 def node_to_join(searchhash, selfipaddress, username, password)
   joinhash = {}
+  joinarray = {}
   prefix = "ns_1@"
   separator = ","
   i = 0
@@ -73,7 +73,7 @@ def node_to_join(searchhash, selfipaddress, username, password)
         info = get_node_json(node['ipaddress'], username, password)
         if info
           if found_cluster(info)
-            joinarray = join_to_cluster(info, selfipaddress, node['ipaddress'])
+            joinarray = join_to_cluster(jvalue, selfipaddress)
             return joinarray 
           end
           if node['ipaddress'] != selfipaddress
@@ -88,15 +88,15 @@ def node_to_join(searchhash, selfipaddress, username, password)
     break if breakloop
     i +=     sleep 10
   end
-  return if joinhash.empty?
-  joinarray = {}
-  pick = joinhash.sort.reverse.pop
-  print "pick is #{pick}\n"
-  joinarray['nodetojoin'] = pick[0]
-  joinarray['knownnodes'] = prefix + selfipaddress + separator + prefix + joinarray['nodetojoin']
-  # print "join array is #{joinarray}\n"
-  joinarray
-end
+  unless joinhash.empty?
+    pick = joinhash.sort.reverse.pop
+    print "pick is #{pick}\n"
+    joinarray['nodetojoin'] = pick[0]
+    joinarray['knownnodes'] = prefix + selfipaddress + separator + prefix + joinarray['nodetojoin']
+    # print "join array is #{joinarray}\n"
+    return joinarray
+  end
+  end
 
 # target=node_to_join(cluster,selfipaddress,username,password)
 # print "goning to join #{target}"

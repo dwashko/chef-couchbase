@@ -25,9 +25,7 @@ else
   cluster = search(:node, "role:#{cluster_name}")
 end
 
-unless cluster.empty?
-  target = node_to_join(cluster, selfipaddress, node['couchbase']['server']['username'], node['couchbase']['server']['password'])
-end
+unless cluster.emtpy? target = node_to_join(cluster, selfipaddress, node['couchbase']['server']['username'], node['couchbase']['server']['password'])
 
 if target
   add_node cluster_name do
