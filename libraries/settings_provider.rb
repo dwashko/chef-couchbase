@@ -13,7 +13,7 @@ class Chef
       end
 
       def action_modify
-        return unless settings_match?
+        return if settings_match?
         post "/settings/#{@new_resource.group}", @new_resource.settings
         @new_resource.updated_by_last_action true
         Chef::Log.info "#{@new_resource} modified"

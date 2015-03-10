@@ -1,6 +1,8 @@
 require 'net/http'
 require 'json'
 
+# I know this is a bit of a mess to begin with
+# This whole thing needs to be rewritten as a class
 # rubocop:disable Metrics/MethodLength
 def get_node_json(ipaddress, username, password)
   uri = URI("http://#{ipaddress}:8091/pools/default")
@@ -61,40 +63,47 @@ def join_to_cluster(jvalue, selfipaddress, clusterip)
   joinarray
 end
 
-def node_to_join(searchhash, selfipaddress, username, password)
-  joinhash = {}
-  prefix = "ns_1@"
-  separator = ","
-  i = 0
-  while i < 3
-    breakloop = true
-    unless searchhash.empty?
-      searchhash.each do |node|
-        info = get_node_json(node['ipaddress'], username, password)
-        if info
-          if found_cluster(info)
-            joinarray = join_to_cluster(info, selfipaddress, node['ipaddress'])
-            return joinarray 
-          end
-          if node['ipaddress'] != selfipaddress
-            ip = node['ipaddress']
-            joinhash[ip] = get_timestamp(info)
-          end
-        else
-          breakloop = false
-        end
+# rubocop:disable MethodLength, Next
+def probe_nodes(searchhash, selfipaddress, username, password, probe = {})
+  probe['joinhash'] = {}
+  searchhash.each do |node|
+    info = get_node_json(node['ipaddress'], username, password)
+    if info
+      if found_cluster(info)
+        probe['joinarray'] = join_to_cluster(info, selfipaddress, node['ipaddress'])
+      elsif node['ipaddress'] != selfipaddress
+        ip = node['ipaddress']
+        probe['joinhash'][ip] = get_timestamp(info)
       end
     end
-    break if breakloop
-    i +=     sleep 10
   end
-  return if joinhash.empty?
+  probe
+end
+# rubocop:enable MethodLength, Next
+
+def loopit(searchhash, selfipaddress, username, password)
+  i = 0
+  while i < 3
+    probearray = probe_nodes(searchhash, selfipaddress, username, password)
+    if probearray
+      return probearray['joinarray'] if probearray['joinarray']
+      return pickit(probearray['joinhash'], selfipaddress) unless probearray['joinhash'].empty?
+    end
+    i += 1
+    sleep 10
+  end
+end
+
+def pickit(joinhash, selfipaddress)
   joinarray = {}
   pick = joinhash.sort.reverse.pop
-  print "pick is #{pick}\n"
   joinarray['nodetojoin'] = pick[0]
-  joinarray['knownnodes'] = prefix + selfipaddress + separator + prefix + joinarray['nodetojoin']
-  # print "join array is #{joinarray}\n"
+  joinarray['knownnodes'] = "ns_1@" + selfipaddress + ",ns_1@" + joinarray['nodetojoin']
+  joinarray
+end
+
+def node_to_join(searchhash, selfipaddress, username, password)
+  joinarray = loopit(searchhash, selfipaddress, username, password)
   joinarray
 end
 

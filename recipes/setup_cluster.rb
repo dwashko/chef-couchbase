@@ -5,18 +5,11 @@
 
 # cluster_name = node["cluster_name"]
 cluster_name = node['couchbase']['server']['cluster_name']
-selfipaddress = ""
+# selfipaddress = ""
 # known_nodes=prefix+self.node["ipaddress"]
 
-if node["ipaddress"] != selfipaddress
-  Chef::Log.info("if - node ipaddress is '#{node['ipaddress']}' before selfipaddress is set")
-  selfipaddress = node["ipaddress"]
-  Chef::Log.info("if - node ipaddress is '#{node['ipaddress']}' while selfipaddress is \
-    '#{selfipaddress}' after selfipaddress is set")
-else
-  Chef::Log.info("else - if statement is false  node ipaddress is '#{node['ipaddress']}' while \
-    selfipaddress is '#{selfipaddress}'")
-end
+# selfipaddress = node['ipaddress'] if node["ipaddress"] != selfipaddress
+selfipaddress = node['ipaddress']
 
 # for vagrant testing set and attribute vagrant = true in your role or Vagrant file.
 if Chef::Config[:solo] && !node['vagrant']
