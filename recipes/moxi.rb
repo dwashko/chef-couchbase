@@ -44,6 +44,17 @@ unless (node['recipes'].include?("couchbase::server"))
     action :enable
   end
 
+  if node['couchbase']['moxi']['bucket']['name']
+    template "/opt/moxi/etc/moxi.cfg" do
+      source "moxi.cfg.erb"
+      owner 'moxi'
+      group 'moxi'
+      mode '00644'
+      action :create
+      notifies :restart, "service[moxi-server]"
+    end
+  end
+
   template "/opt/moxi/etc/moxi-cluster.cfg" do
     source "moxi-cluster.cfg.erb"
     owner 'moxi'

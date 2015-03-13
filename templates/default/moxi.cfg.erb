@@ -1,0 +1,18 @@
+<% if node[:couchbase][:moxi][:auth]=='sasl' -%>
+usr=<%= node['couchbase']['moxi']['bucket']['name'] %>,
+pwd=<%= node['couchbase']['moxi']['bucket']['password'] %>,
+<% end -%>
+
+port_listen=<%= node['couchbase']['moxi']['port_listen'] %>,
+
+downstream_max=1024,
+downstream_conn_max=4,
+downstream_conn_queue_timeout=200,
+downstream_timeout=5000,
+wait_queue_timeout=500,
+connect_max_errors=5,
+connect_retry_interval=30000,
+connect_timeout=500,
+auth_timeout=500,
+
+cycle=200
