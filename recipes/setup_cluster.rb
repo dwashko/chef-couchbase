@@ -12,7 +12,7 @@ cluster_name = node['couchbase']['server']['cluster_name']
 selfipaddress = node['ipaddress']
 
 # for vagrant testing set and attribute vagrant = true in your role or Vagrant file.
-if Chef::Config[:solo] && !node['vagrant']
+if Chef::Config[:solo] && !Chef::Config[:local_mode]
   Chef::Log.warn("This recipe uses search and Chef solo does not support search.")
 else
   cluster = search(:node, "role:#{cluster_name}")
