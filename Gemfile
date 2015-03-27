@@ -21,7 +21,7 @@ group :integration do
 end
 
 group :development do
-  gem 'test-kitchen'
+  gem 'test-kitchen', '~> 1.2.0'
   gem 'webmock'
   gem 'kitchen-vagrant'
   gem 'fauxhai'
