@@ -1,9 +1,10 @@
-require "chef/provider"
-require File.join(File.dirname(__FILE__), "client")
-require File.join(File.dirname(__FILE__), "pool_data")
+require 'chef/provider'
+require File.join(File.dirname(__FILE__), 'client')
+require File.join(File.dirname(__FILE__), 'pool_data')
 
 class Chef
   class Provider
+    # Provices Class CouchbasePool < Provider
     class CouchbasePool < Provider
       include Couchbase::Client
       include Couchbase::PoolData
@@ -19,7 +20,7 @@ class Chef
       def action_modify_if_existing
         # unless @current_resource.exists
         return unless @current_resource.exists
-        post "/pools/#{@new_resource.pool}", "memoryQuota" => @new_resource.memory_quota_mb
+        post "/pools/#{@new_resource.pool}", 'memoryQuota' => @new_resource.memory_quota_mb
         @new_resource.updated_by_last_action true
         Chef::Log.info "#{@new_resource} created"
       end

@@ -3,13 +3,14 @@
 
 AllCops:
   Exclude:
+    - 'test/integration/default/**/*'
     - 'spec/**/*' # ignore spec tests for now
     - 'vendor/**/*' # ignore non-local files
     - Guardfile
 
 # We like longer lines
 Metrics/LineLength:
-  Max: 132
+  Max: 160
 
 # TODO: add encoding headers
 Style/Encoding:
@@ -38,9 +39,3 @@ Style/SingleSpaceBeforeFirstArg:
 # Only enforce a wordlist for 5 or longer lists.
 Style/WordArray:
   MinSize: 5
-
-StringLiterals:
-  Enabled: false
-  
-Documentation:
-  Enabled: false

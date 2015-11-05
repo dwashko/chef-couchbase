@@ -1,9 +1,10 @@
-require "chef/provider"
-require File.join(File.dirname(__FILE__), "client")
-require File.join(File.dirname(__FILE__), "cluster_data")
+require 'chef/provider'
+require File.join(File.dirname(__FILE__), 'client')
+require File.join(File.dirname(__FILE__), 'cluster_data')
 
 class Chef
   class Provider
+    # Profides Class XdcrRef < Provider
     class XdcrRef < Provider
       include Couchbase::Client
 
@@ -17,18 +18,18 @@ class Chef
       end
 
       def action_create_ref
-        post "/pools/default/remoteClusters", create_params
+        post '/pools/default/remoteClusters', create_params
         @new_resource.updated_by_last_action true
         Chef::Log.info "#{@new_resource} modified"
       end
 
       def create_params
         {
-          "uuid" => new_resource.uuid,
-          "name" => new_resource.remote_name,
-          "hostname" => new_resource.remote_node,
-          "username" => new_resource.username,
-          "password" => new_resource.password
+          'uuid' => new_resource.uuid,
+          'name' => new_resource.remote_name,
+          'hostname' => new_resource.remote_node,
+          'username' => new_resource.username,
+          'password' => new_resource.password
         }
       end
     end

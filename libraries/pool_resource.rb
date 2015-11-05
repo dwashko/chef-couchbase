@@ -1,8 +1,9 @@
-require "chef/resource"
-require File.join(File.dirname(__FILE__), "credentials_attributes")
+require 'chef/resource'
+require File.join(File.dirname(__FILE__), 'credentials_attributes')
 
 class Chef
   class Resource
+    # Provides Class CouchbasePool < Resource
     class CouchbasePool < Resource
       include Couchbase::CredentialsAttributes
 
@@ -16,12 +17,12 @@ class Chef
 
       def memory_quota_mb(arg = nil)
         set_or_return(:memory_quota_mb, arg, :kind_of => Integer, :required => true, :callbacks => {
-                        "must be at least 256" => ->(quota) { quota >= 256 }
+                        'must be at least 256' => ->(quota) { quota >= 256 }
                       })
       end
 
       def initialize(*)
-        Chef::Log.info("Dann initializing pool")
+        Chef::Log.info('Dann initializing pool')
         super
         @action = :modify_if_existing
         @allowed_actions.push :modify_if_existing

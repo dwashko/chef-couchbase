@@ -1,8 +1,9 @@
-require "chef/resource"
-require File.join(File.dirname(__FILE__), "credentials_attributes")
+require 'chef/resource'
+require File.join(File.dirname(__FILE__), 'credentials_attributes')
 
 class Chef
   class Resource
+    # provides Class CouchbaseSettings < Resource
     class CouchbaseSettings < Resource
       include Couchbase::CredentialsAttributes
 

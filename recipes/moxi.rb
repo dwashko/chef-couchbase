@@ -25,7 +25,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 # Mutually exclusive with the server recipe. If you have the server on this node you don't need moxi client.
-unless node['recipes'].include?("couchbase::server")
+unless node['recipes'].include?('couchbase::server')
 
   remote_file File.join(Chef::Config[:file_cache_path], node['couchbase']['moxi']['package_file']) do
     source node['couchbase']['moxi']['package_full_url']
@@ -33,27 +33,27 @@ unless node['recipes'].include?("couchbase::server")
   end
 
   case node['platform_family']
-  when "debian"
+  when 'debian'
     dpkg_package File.join(Chef::Config[:file_cache_path], node['couchbase']['moxi']['package_file'])
-  when "rhel"
+  when 'rhel'
     rpm_package File.join(Chef::Config[:file_cache_path], node['couchbase']['moxi']['package_file'])
   end
 
-  service "moxi-server" do
+  service 'moxi-server' do
     supports :restart => true, :status => true
     action :enable
   end
 
-  template "/opt/moxi/etc/moxi-cluster.cfg" do
-    source "moxi-cluster.cfg.erb"
+  template '/opt/moxi/etc/moxi-cluster.cfg' do
+    source 'moxi-cluster.cfg.erb'
     owner 'moxi'
     group 'moxi'
     mode '00644'
     action :create
-    notifies :restart, "service[moxi-server]"
+    notifies :restart, 'service[moxi-server]'
   end
 
-  service "moxi-server" do
+  service 'moxi-server' do
     action :start
   end
 

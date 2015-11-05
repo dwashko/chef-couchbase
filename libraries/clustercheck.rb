@@ -10,7 +10,7 @@ def get_node_json(ipaddress, username, password)
   check.basic_auth username, password
   begin
     res = Net::HTTP.start(uri.hostname, uri.port, :open_timeout => 10) { |http| http.request(check) }
-    return unless res.code == "200"
+    return unless res.code == '200'
     body = JSON.parse(res.body)
     return body
   rescue # => e
@@ -28,7 +28,7 @@ def found_cluster(jvalue)
 end
 
 def not_in_cluster(jvalue, selfipaddress)
-  hostcheck = selfipaddress + ":8091"
+  hostcheck = selfipaddress + ':8091'
   jvalue['nodes'].each do |ncheck|
     return false if ncheck['hostname'] == hostcheck
   end
@@ -36,9 +36,9 @@ def not_in_cluster(jvalue, selfipaddress)
 end
 
 def get_known_nodes_from_json(jvalue)
-  prefix = "ns_1@"
-  separator = ","
-  known_nodes = ""
+  prefix = 'ns_1@'
+  separator = ','
+  known_nodes = ''
   jvalue['nodes'].each do |known|
     known_nodes = known_nodes + separator + prefix + known['hostname'].sub(/:8091/, '')
   end
@@ -46,7 +46,7 @@ def get_known_nodes_from_json(jvalue)
 end
 
 def get_timestamp(jvalue)
-  timestamp = ""
+  timestamp = ''
   jvalue['nodes'].each do |cnode|
     ts = Time.now.to_i
     timestamp = ts - cnode['uptime'].to_i
@@ -98,7 +98,7 @@ def pickit(joinhash, selfipaddress)
   joinarray = {}
   pick = joinhash.sort.reverse.pop
   joinarray['nodetojoin'] = pick[0]
-  joinarray['knownnodes'] = "ns_1@" + selfipaddress + ",ns_1@" + joinarray['nodetojoin']
+  joinarray['knownnodes'] = 'ns_1@' + selfipaddress + ',ns_1@' + joinarray['nodetojoin']
   joinarray
 end
 

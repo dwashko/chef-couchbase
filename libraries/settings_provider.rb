@@ -1,8 +1,9 @@
-require "chef/provider"
-require File.join(File.dirname(__FILE__), "client")
+require 'chef/provider'
+require File.join(File.dirname(__FILE__), 'client')
 
 class Chef
   class Provider
+    # Provides Class CouchbaseSettings < Provider
     class CouchbaseSettings < Provider
       include Couchbase::Client
 

@@ -1,8 +1,9 @@
-require "chef/resource"
-require File.join(File.dirname(__FILE__), "credentials_attributes")
+require 'chef/resource'
+require File.join(File.dirname(__FILE__), 'credentials_attributes')
 
 class Chef
   class Resource
+    # Provices Class CouchbaseNode < Resource
     class CouchbaseNode < Resource
       include Couchbase::CredentialsAttributes
 
@@ -11,7 +12,7 @@ class Chef
       end
 
       def database_path(arg = nil)
-        set_or_return(:database_path, arg, :kind_of => String, :default => "/opt/couchbase/var/lib/couchbase/data")
+        set_or_return(:database_path, arg, :kind_of => String, :default => '/opt/couchbase/var/lib/couchbase/data')
       end
 
       def initialize(*)

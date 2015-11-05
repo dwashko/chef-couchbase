@@ -1,4 +1,5 @@
 module Couchbase
+  # Provices Module Client
   module Client
     private
 
