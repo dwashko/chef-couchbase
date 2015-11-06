@@ -10,6 +10,8 @@ driver:
   associate_public_ip: false
   interface: private
   user_data: <%= ENV['USER_DATA_PATH'] %>
+  customize:
+    memory: 2048
   tags:
     OWNER: <%= ENV['AWS_OWNER_TAG'] %>
 
