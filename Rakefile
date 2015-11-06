@@ -35,7 +35,6 @@ namespace :integration do
       instance.test(:always)
     end
   end
-  desc 'Run Test Kitchen with EC2'
   task :ec2 do
     Kitchen.logger = Kitchen.default_file_logger
     @loader = Kitchen::Loader::YAML.new(project_config: './.kitchen.ec2.yml')
