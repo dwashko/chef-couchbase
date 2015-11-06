@@ -26,10 +26,10 @@ platforms:
       image_id: <%= ENV['AWS_AMI_ID'] %>
 
 suites:
-  - name: couchbase-authoring 
+  - name: couchbase_server 
     data_bags_path: test/integration/data_bags
     run_list:
-      - recipe[couchbase-authoring]
+      - recipe[couchbase::server]
     attributes:
       couchbase:
         server:
