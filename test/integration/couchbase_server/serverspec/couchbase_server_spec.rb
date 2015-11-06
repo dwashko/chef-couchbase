@@ -1,11 +1,11 @@
 require_relative 'spec_helper'
 
 describe user('couchbase') do
-it { should exist }
+  it { should exist }
 end
 
 describe group('couchbase') do
-it { should exist }
+  it { should exist }
 end
 
 describe service('couchbase-server') do
@@ -13,7 +13,7 @@ describe service('couchbase-server') do
 end
 
 describe command('/opt/couchbase/bin/couchbase-cli server-info -c 127.0.0.1:8091 -u Administrator -p password |grep status') do
-  its(:stdout) {  should match(/  "status": "healthy",/) }
+  its(:stdout) { should match(/  "status": "healthy",/) }
 end
 
 describe port(8091) do
