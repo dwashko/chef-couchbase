@@ -1,18 +1,15 @@
 source 'https://rubygems.org'
 
+gem 'rake'
 gem 'berkshelf'
-gem 'coveralls', require: false
-gem 'rubocop', '0.33.0'
 gem 'chef-handler-profiler'
 gem 'chef-handler-opsmatic'
 gem 'chef-handler-datadog'
+gem 'rubocop', '0.33.0'
 
-group :development do
-  gem 'guard'
-  gem 'guard-kitchen'
-  gem 'guard-foodcritic', '>= 1.0'
-  gem 'foodcritic', '>= 3.0'
-  gem 'chefspec', '>= 3.1'
+group :test do
+  gem 'chefspec'
+  gem 'chef-zero'
 end
 
 group :integration do
