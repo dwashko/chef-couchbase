@@ -39,11 +39,6 @@ unless node['recipes'].include?('couchbase::server')
     rpm_package File.join(Chef::Config[:file_cache_path], node['couchbase']['moxi']['package_file'])
   end
 
-  service 'moxi-server' do
-    supports :restart => true, :status => true
-    action :enable
-  end
-
   template '/opt/moxi/etc/moxi-cluster.cfg' do
     source 'moxi-cluster.cfg.erb'
     owner 'moxi'
@@ -54,7 +49,8 @@ unless node['recipes'].include?('couchbase::server')
   end
 
   service 'moxi-server' do
-    action :start
+    supports :restart => true, :status => true
+    action [:enable, :start]
   end
 
 end
