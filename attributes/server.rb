@@ -6,6 +6,7 @@ default['couchbase']['server']['username'] = 'Administrator'
 default['couchbase']['server']['password'] = 'password'
 
 default['couchbase']['server']['memory_quota_mb'] = 4000
+default['couchbase']['server']['index_memory_quota_mb'] = 256
 # default['couchbase']['server']['memory_quota_mb'] = Couchbase::MaxMemoryQuotaCalculator.from_node(node).in_megabytes
 
 # only supports version 3.0.0 and higher due to file name changes for package_file

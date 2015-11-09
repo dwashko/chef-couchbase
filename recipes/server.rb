@@ -119,7 +119,7 @@ else
   execute 'cluster-init' do
     command "/opt/couchbase/bin/couchbase-cli cluster-init -c 127.0.0.1:8091 --cluster-username=#{node['couchbase']['server']['username']} \
         --cluster-password=#{node['couchbase']['server']['password']} --services=#{node['couchbase']['server']['services']} \
-        --cluster-index-ramsize=#{node['couchbase']['server']['memory_quota_mb']} \
+        --cluster-index-ramsize=#{node['couchbase']['server']['index_memory_quota_mb']} \
         --cluster-ramsize=#{node['couchbase']['server']['memory_quota_mb']}"
   end
 end

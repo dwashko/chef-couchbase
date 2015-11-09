@@ -1,3 +1,7 @@
+# 3.0.1
+-------
+[dwashko] - Separating index ram size from memory_quota_mb
+
 # 3.0.0
 -------
 [dwashko] - added support for couchbase 4.0. Writing serverpec tests for server.
