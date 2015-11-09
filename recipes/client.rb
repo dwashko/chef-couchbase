@@ -25,12 +25,12 @@
 #
 
 case node['platform_family']
-when "debian"
-  apt_repository "couchbase" do
-    uri "http://packages.couchbase.com/ubuntu"
+when 'debian'
+  apt_repository 'couchbase' do
+    uri 'http://packages.couchbase.com/ubuntu'
     distribution node['lsb']['codename']
-    components ["main"]
-    key "http://packages.couchbase.com/ubuntu/couchbase.key"
+    components ['main']
+    key 'http://packages.couchbase.com/ubuntu/couchbase.key'
   end
 
   %w(libcouchbase2 libcouchbase-dev).each do |p|
@@ -39,7 +39,7 @@ when "debian"
     end
   end
 
-when "rhel"
+when 'rhel'
 
   case
   when node['platform_version'].to_f >= 5.0 && node['platform_version'].to_f < 6.0
@@ -50,11 +50,11 @@ when "rhel"
     Chef::Log.error("Platform version #{node['platform_version']} is unsupported by Couchbase C library")
   end
 
-  yum_repository "couchbase" do
-    name "couchbase"
-    description "Couchbase package repository"
+  yum_repository 'couchbase' do
+    name 'couchbase'
+    description 'Couchbase package repository'
     url "http://packages.couchbase.com/rpm/#{osver}/$basearch/"
-    gpgkey "http://packages.couchbase.com/rpm/couchbase-rpm.key"
+    gpgkey 'http://packages.couchbase.com/rpm/couchbase-rpm.key'
     action :add
   end
 

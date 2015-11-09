@@ -1,13 +1,14 @@
 module Couchbase
+  # Provides Module ClusterData
   module ClusterData
     private
 
     def pool_memory_quota_mb
-      (pool_data["storageTotals"]["ram"]["quotaTotal"] / pool_data["nodes"].size / 1024 / 1024).to_i
+      (pool_data['storageTotals']['ram']['quotaTotal'] / pool_data['nodes'].size / 1024 / 1024).to_i
     end
 
     def pool_data
-      return @pool_data if instance_variable_defined? "@pool_data"
+      return @pool_data if instance_variable_defined? '@pool_data'
 
       @pool_data ||= begin
         response = get "/pools/#{@new_resource.cluster}"

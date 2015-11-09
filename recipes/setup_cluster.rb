@@ -13,7 +13,7 @@ selfipaddress = node['ipaddress']
 
 # for vagrant testing set and attribute vagrant = true in your role or Vagrant file.
 if Chef::Config[:solo] && !Chef::Config[:local_mode]
-  Chef::Log.warn("This recipe uses search and Chef solo does not support search.")
+  Chef::Log.warn('This recipe uses search and Chef solo does not support search.')
 else
   cluster = search(:node, "role:#{cluster_name}")
 end
@@ -24,13 +24,13 @@ end
 
 if target
   add_node cluster_name do
-    hostname node["ipaddress"]
+    hostname node['ipaddress']
     username node['couchbase']['server']['username']
     password node['couchbase']['server']['password']
     clusterip target['nodetojoin']
   end
-  ejectednodes = ""
-  cluster_rebal "Rebalance-In Nodes to form a cluster  " do
+  ejectednodes = ''
+  cluster_rebal 'ebalance-In Nodes to form a cluster  ' do
     ejected_nodes ejectednodes
     known_nodes target['knownnodes']
     username node['couchbase']['server']['username']
@@ -39,7 +39,7 @@ if target
   end
 end
 
-ruby_block "wait for rebalance completion " do
+ruby_block 'wait for rebalance completion ' do
   block do
     sleep 5
   end

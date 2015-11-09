@@ -15,16 +15,16 @@ remote_cluster_name = node['couchbase']['server']['remote_cluster']
 # delete this line src_node = src_cluster[0]["ipaddress"]
 
 if Chef::Config[:solo]
-  Chef::Log.warn("This recipe uses search, chef solo does not support search.")
+  Chef::Log.warn('This recipe uses search, chef solo does not support search.')
 else
   remote_cluster = search(:node, "couchbase:#{remote_cluster_name}")
 end
-remote_node = remote_cluster[0]["ipaddress"]
+remote_node = remote_cluster[0]['ipaddress']
 
 username = node['couchbase']['server']['username']
 password = node['couchbase']['server']['password']
 
-Chef::Log.info "Get uuid information of the remote cluster"
+Chef::Log.info 'Get uuid information of the remote cluster'
 # foodcritic complained about this, not sure this is proper but it has not broke my testing yet.
 # s_uuid = `curl 'http://#{username}:#{password}@#{remote_node}:8091/pools' | \
 # python -mjson.tool |sed -e 's/[","]/''/g' | awk -F "uuid: " '{print $2}'`
@@ -36,20 +36,20 @@ s_uuid error!
 
 uuid = s_uuid.strip
 
-xdcr_ref "Create XDCR Replication reference  " do
+xdcr_ref 'Create XDCR Replication reference  ' do
   uuid uuid
-  remote_name "remote_link"
+  remote_name 'remote_link'
   remote_node remote_node
   username node['couchbase']['server']['username']
   password node['couchbase']['server']['password']
 end
 
-xdcr_start "Setting up replication from bucket default to default" do
+xdcr_start 'Setting up replication from bucket default to default' do
   uuid uuid
-  to_cluster "remote_link"
-  from_bucket "default"
-  to_bucket "default"
-  replication_type "continuous"
+  to_cluster 'remote_link'
+  from_bucket 'default'
+  to_bucket 'default'
+  replication_type 'continuous'
   username node['couchbase']['server']['username']
   password node['couchbase']['server']['password']
 end

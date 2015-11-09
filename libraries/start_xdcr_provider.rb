@@ -1,9 +1,10 @@
-require "chef/provider"
-require File.join(File.dirname(__FILE__), "client")
-require File.join(File.dirname(__FILE__), "cluster_data")
+require 'chef/provider'
+require File.join(File.dirname(__FILE__), 'client')
+require File.join(File.dirname(__FILE__), 'cluster_data')
 
 class Chef
   class Provider
+    # provides Class XdcrStart < Provider
     class XdcrStart < Provider
       include Couchbase::Client
 
@@ -21,20 +22,20 @@ class Chef
       # rubocop:enable Metrics/AbcSize
 
       def action_start_replication
-        post "/controller/createReplication", create_params
+        post '/controller/createReplication', create_params
         @new_resource.updated_by_last_action true
         Chef::Log.info "#{@new_resource} modified"
       end
 
       def create_params
         {
-          "uuid" => new_resource.uuid,
-          "fromBucket" => new_resource.from_bucket,
-          "toBucket" => new_resource.to_bucket,
-          "toCluster" => new_resource.to_cluster,
-          "replicationType" => new_resource.replication_type,
-          "username" => new_resource.username,
-          "password" => new_resource.password
+          'uuid' => new_resource.uuid,
+          'fromBucket' => new_resource.from_bucket,
+          'toBucket' => new_resource.to_bucket,
+          'toCluster' => new_resource.to_cluster,
+          'replicationType' => new_resource.replication_type,
+          'username' => new_resource.username,
+          'password' => new_resource.password
         }
       end
     end

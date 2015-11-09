@@ -30,58 +30,58 @@ remote_file File.join(Chef::Config[:file_cache_path], node['couchbase']['server'
 end
 
 case node['platform']
-when "debian", "ubuntu"
+when 'debian', 'ubuntu'
   dpkg_package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file'])
-when "redhat", "centos", "scientific", "amazon", "fedora"
+when 'redhat', 'centos', 'scientific', 'amazon', 'fedora'
   rpm_package File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file'])
-when "windows"
+when 'windows'
 
   template "#{Chef::Config[:file_cache_path]}/setup.iss" do
-    source "setup.iss.erb"
+    source 'setup.iss.erb'
     action :create
   end
 
-  windows_package "Couchbase Server" do
+  windows_package 'Couchbase Server' do
     source File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file'])
-    options "/s"
+    options '/s'
     installer_type :custom
     action :install
   end
 end
 
-service "couchbase-server" do
+service 'couchbase-server' do
   supports :restart => true, :status => true
   action [:enable, :start]
 end
 
 directory node['couchbase']['server']['log_dir'] do
-  owner "couchbase"
-  group "couchbase"
+  owner 'couchbase'
+  group 'couchbase'
   mode 0755
   recursive true
 end
 
-ruby_block "rewrite_couchbase_log_dir_config" do
+ruby_block 'rewrite_couchbase_log_dir_config' do
   log_dir_line = %({error_logger_mf_dir, "#{node['couchbase']['server']['log_dir']}"}.)
 
   block do
-    file = Chef::Util::FileEdit.new("/opt/couchbase/etc/couchbase/static_config")
+    file = Chef::Util::FileEdit.new('/opt/couchbase/etc/couchbase/static_config')
     file.search_file_replace_line(/error_logger_mf_dir/, log_dir_line)
     file.write_file
   end
 
-  notifies :restart, "service[couchbase-server]"
+  notifies :restart, 'service[couchbase-server]'
   not_if "grep '#{log_dir_line}' /opt/couchbase/etc/couchbase/static_config"
 end
 
 directory node['couchbase']['server']['database_path'] do
-  owner "couchbase"
-  group "couchbase"
+  owner 'couchbase'
+  group 'couchbase'
   mode 0755
   recursive true
 end
 
-couchbase_node "self" do
+couchbase_node 'self' do
   database_path node['couchbase']['server']['database_path']
   retry_delay 120
   retries 5
@@ -90,25 +90,36 @@ couchbase_node "self" do
   password node['couchbase']['server']['password']
 end
 
-couchbase_settings "web" do
-  settings("username" => node['couchbase']['server']['username'],
-           "password" => node['couchbase']['server']['password'],
-           "port" => 8091)
+version =  node['couchbase']['server']['version'].split('.').first.to_i
+if version < 4
 
-  username node['couchbase']['server']['username']
-  password node['couchbase']['server']['password']
-end
+  couchbase_settings 'web' do
+    settings('username' => node['couchbase']['server']['username'],
+             'password' => node['couchbase']['server']['password'],
+             'port' => 8091)
 
-couchbase_cluster "default" do
-  memory_quota_mb node['couchbase']['server']['memory_quota_mb']
+    username node['couchbase']['server']['username']
+    password node['couchbase']['server']['password']
+  end
 
-  username node['couchbase']['server']['username']
-  password node['couchbase']['server']['password']
-end
+  couchbase_cluster 'default' do
+    memory_quota_mb node['couchbase']['server']['memory_quota_mb']
 
-couchbase_pool "default" do
-  memory_quota_mb node['couchbase']['server']['memory_quota_mb']
+    username node['couchbase']['server']['username']
+    password node['couchbase']['server']['password']
+  end
 
-  username node['couchbase']['server']['username']
-  password node['couchbase']['server']['password']
+  couchbase_pool 'default' do
+    memory_quota_mb node['couchbase']['server']['memory_quota_mb']
+
+    username node['couchbase']['server']['username']
+    password node['couchbase']['server']['password']
+  end
+else
+  execute 'cluster-init' do
+    command "/opt/couchbase/bin/couchbase-cli cluster-init -c 127.0.0.1:8091 --cluster-username=#{node['couchbase']['server']['username']} \
+        --cluster-password=#{node['couchbase']['server']['password']} --services=#{node['couchbase']['server']['services']} \
+        --cluster-index-ramsize=#{node['couchbase']['server']['memory_quota_mb']} \
+        --cluster-ramsize=#{node['couchbase']['server']['memory_quota_mb']}"
+  end
 end

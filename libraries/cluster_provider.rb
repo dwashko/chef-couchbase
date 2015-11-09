@@ -1,9 +1,10 @@
-require "chef/provider"
-require File.join(File.dirname(__FILE__), "client")
-require File.join(File.dirname(__FILE__), "cluster_data")
+require 'chef/provider'
+require File.join(File.dirname(__FILE__), 'client')
+require File.join(File.dirname(__FILE__), 'cluster_data')
 
 class Chef
   class Provider
+    # Provides Class CouchbaseCluster < Provider
     class CouchbaseCluster < Provider
       include Couchbase::Client
       include Couchbase::ClusterData
@@ -19,7 +20,7 @@ class Chef
       def action_create_if_missing
         # unless @current_resource.exists
         return if @current_resource.exists
-        post "/pools/#{@new_resource.cluster}", "memoryQuota" => @new_resource.memory_quota_mb
+        post "/pools/#{@new_resource.cluster}", 'memoryQuota' => @new_resource.memory_quota_mb
         @new_resource.updated_by_last_action true
         Chef::Log.info "#{@new_resource} created"
       end

@@ -1,9 +1,10 @@
-require "chef/provider"
-require File.join(File.dirname(__FILE__), "client")
-require File.join(File.dirname(__FILE__), "cluster_data")
+require 'chef/provider'
+require File.join(File.dirname(__FILE__), 'client')
+require File.join(File.dirname(__FILE__), 'cluster_data')
 
 class Chef
   class Provider
+    # Provides Class CouchbaseBucket < Provider
     class CouchbaseBucket < Provider
       include Couchbase::Client
       include Couchbase::ClusterData
@@ -48,22 +49,22 @@ class Chef
 
       def create_params
         {
-          "authType" => "sasl",
-          "saslPassword" => "",
-          "bucketType" => new_api_type,
-          "name" => new_resource.bucket,
-          "ramQuotaMB" => new_memory_quota_mb,
-          "replicaNumber" => new_resource.replicas || 0
+          'authType' => 'sasl',
+          'saslPassword' => '',
+          'bucketType' => new_api_type,
+          'name' => new_resource.bucket,
+          'ramQuotaMB' => new_memory_quota_mb,
+          'replicaNumber' => new_resource.replicas || 0
         }
       end
 
       def new_api_type
-        new_resource.type == "couchbase" ? "membase" : new_resource.type
+        new_resource.type == 'couchbase' ? 'membase' : new_resource.type
       end
 
       def modify_params
         {
-          "ramQuotaMB" => new_memory_quota_mb
+          'ramQuotaMB' => new_memory_quota_mb
         }
       end
 
@@ -72,19 +73,19 @@ class Chef
       end
 
       def bucket_memory_quota_mb
-        (bucket_data["quota"]["rawRAM"] / 1024 / 1024).to_i
+        (bucket_data['quota']['rawRAM'] / 1024 / 1024).to_i
       end
 
       def bucket_replicas
-        bucket_data["replicaNumber"]
+        bucket_data['replicaNumber']
       end
 
       def bucket_type
-        bucket_data["bucketType"] == "membase" ? "couchbase" : bucket_data["bucketType"]
+        bucket_data['bucketType'] == 'membase' ? 'couchbase' : bucket_data['bucketType']
       end
 
       def bucket_data
-        return @bucket_data if instance_variable_defined? "@bucket_data"
+        return @bucket_data if instance_variable_defined? '@bucket_data'
 
         @bucket_data ||= begin
           response = get "/pools/#{@new_resource.cluster}/buckets/#{@new_resource.bucket}"

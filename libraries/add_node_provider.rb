@@ -1,9 +1,10 @@
-require "chef/provider"
-require File.join(File.dirname(__FILE__), "client")
-require File.join(File.dirname(__FILE__), "cluster_data")
+require 'chef/provider'
+require File.join(File.dirname(__FILE__), 'client')
+require File.join(File.dirname(__FILE__), 'cluster_data')
 
 class Chef
   class Provider
+    # Provides Class AddNode < Provider
     class AddNode < Provider
       include Couchbase::Client
 
@@ -26,20 +27,20 @@ class Chef
       def action_add_node_only
         begin
               # Chef::Log.info ("value of clusterip is " + new_resource.clusterip)
-              post "/controller/addNode", create_params
+              post '/controller/addNode', create_params
               @new_resource.updated_by_last_action true
               Chef::Log.info "#{@new_resource} modified"
             end
 
-            rescue SystemCallError
-              Chef::Log "error adding node is " + $ERROR_INFO
+      rescue SystemCallError
+        Chef::Log 'error adding node is ' + $ERROR_INFO
       end
 
       def create_params
         {
-          "hostname" => new_resource.hostname,
-          "user" => new_resource.username,
-          "password" => new_resource.password
+          'hostname' => new_resource.hostname,
+          'user' => new_resource.username,
+          'password' => new_resource.password
         }
       end
     end

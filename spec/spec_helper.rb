@@ -1,8 +1,6 @@
 require 'chefspec'
 require 'chefspec/berkshelf'
-require 'webmock/rspec'
-
-WebMock.allow_net_connect!
+ChefSpec::Coverage.start!
 
 RSpec.configure do |config|
   # run all specs when using a filter, but no spec match

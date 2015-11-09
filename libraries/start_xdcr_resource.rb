@@ -1,8 +1,9 @@
-require "chef/resource"
-require File.join(File.dirname(__FILE__), "credentials_attributes")
+require 'chef/resource'
+require File.join(File.dirname(__FILE__), 'credentials_attributes')
 
 class Chef
   class Resource
+    # provides Class XdcrStart < Resource
     class XdcrStart < Resource
       include Couchbase::CredentialsAttributes
 
@@ -23,7 +24,7 @@ class Chef
       end
 
       def replication_type(arg = nil)
-        set_or_return(:replication_type, arg, :kind_of => String, :name_attribute => true, :default => "continuous")
+        set_or_return(:replication_type, arg, :kind_of => String, :name_attribute => true, :default => 'continuous')
       end
 
       def username(arg = nil)

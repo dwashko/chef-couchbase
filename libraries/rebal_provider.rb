@@ -1,9 +1,10 @@
-require "chef/provider"
-require File.join(File.dirname(__FILE__), "client")
-require File.join(File.dirname(__FILE__), "cluster_data")
+require 'chef/provider'
+require File.join(File.dirname(__FILE__), 'client')
+require File.join(File.dirname(__FILE__), 'cluster_data')
 
 class Chef
   class Provider
+    # Provides class ClusterRebal < Provider
     class ClusterRebal < Provider
       include Couchbase::Client
 
@@ -17,15 +18,15 @@ class Chef
       end
 
       def action_rebalance
-        post "/controller/rebalance", rebal_params
+        post '/controller/rebalance', rebal_params
         @new_resource.updated_by_last_action true
         Chef::Log.info "#{@new_resource} modified"
       end
 
       def rebal_params
         {
-          "ejectedNodes" => new_resource.ejected_nodes,
-          "knownNodes" => new_resource.known_nodes
+          'ejectedNodes' => new_resource.ejected_nodes,
+          'knownNodes' => new_resource.known_nodes
         }
       end
     end

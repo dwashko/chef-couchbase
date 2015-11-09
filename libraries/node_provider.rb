@@ -1,9 +1,10 @@
-require "chef/provider"
-require "net/http"
-require File.join(File.dirname(__FILE__), "client")
+require 'chef/provider'
+require 'net/http'
+require File.join(File.dirname(__FILE__), 'client')
 
 class Chef
   class Provider
+    # Provides Class CouchbaesNode < Provider
     class CouchbaseNode < Provider
       include Couchbase::Client
 
@@ -15,7 +16,7 @@ class Chef
 
       def action_modify
         return unless @current_resource.database_path != @new_resource.database_path
-        post "/nodes/#{@new_resource.id}/controller/settings", "path" => @new_resource.database_path
+        post "/nodes/#{@new_resource.id}/controller/settings", 'path' => @new_resource.database_path
         @new_resource.updated_by_last_action true
         Chef::Log.info "#{@new_resource} modified"
       end
@@ -23,7 +24,7 @@ class Chef
       private
 
       def node_database_path
-        node_data["storage"]["hdd"][0]["path"]
+        node_data['storage']['hdd'][0]['path']
       end
 
       def node_data

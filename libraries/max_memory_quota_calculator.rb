@@ -1,4 +1,5 @@
 module Couchbase
+  # Provides Class MaxMemoryQuotaCalculator
   class MaxMemoryQuotaCalculator
     MAX_MEMORY_PERCENT = 0.8
     RESERVE_BYTES = 1024 * 1024 * 1024 # 1 gigabyte
@@ -7,12 +8,12 @@ module Couchbase
 
     class << self
       def from_node(node)
-        if node["memory"].nil?
+        if node['memory'].nil?
           # Usually nodes have this set, except if running in RSpec without Fauxhai,
           # so set some dummy value
           new kilobytes_to_bytes 0.to_i
         else
-          new kilobytes_to_bytes node["memory"]['total'].to_i
+          new kilobytes_to_bytes node['memory']['total'].to_i
         end
       end
 

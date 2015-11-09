@@ -1,11 +1,11 @@
-package_machine = node['kernel']['machine'] == "x86_64" ? "x86_64" : "x86"
+package_machine = node['kernel']['machine'] == 'x86_64' ? 'x86_64' : 'x86'
 
-default['couchbase']['moxi']['version'] = "1.8.1"
+default['couchbase']['moxi']['version'] = '1.8.1'
 
 case platform
-when "ubuntu", "debian"
+when 'ubuntu', 'debian'
   default['couchbase']['moxi']['package_file'] = "moxi-server_#{package_machine}_#{node['couchbase']['moxi']['version']}.deb"
-when "redhat", "centos", "scientific", "amazon", "fedora"
+when 'redhat', 'centos', 'scientific', 'amazon', 'fedora'
   default['couchbase']['moxi']['package_file'] = "moxi-server_#{package_machine}_#{node['couchbase']['moxi']['version']}.rpm"
 else
   Chef::Log.error("Moxi Server is not supported on #{platform}")
