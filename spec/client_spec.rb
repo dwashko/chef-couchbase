@@ -12,4 +12,11 @@ describe 'couchbase::client' do
     expect(chef_run).to add_yum_repository('couchbase')
   end
 
+  it 'installs libcouchbase2' do
+    expect(chef_run).to install_package('libcouchbase2')
+  end
+
+  it 'installs libcouchbase-devel' do
+    expect(chef_run).to install_package('libcouchbase-devel')
+  end
 end
