@@ -4,6 +4,7 @@ driver:
   customize:
     memory: 2048
   network:
+    - ["forwarded_port", {guest: 8091, host: 8091}]
     - ["private_network", {ip: "192.168.10.11"}]
   vagrantfiles:
     - test/files/VagrantAdditional.rb
@@ -23,4 +24,4 @@ suites:
       couchbase:
         server:
           memory_quota_mb: 256
-          version: "4.0.0"
+          index_path: /opt/couchbase/var/lib/couchbase/index
