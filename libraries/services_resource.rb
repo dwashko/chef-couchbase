@@ -12,7 +12,7 @@ class Chef
       end
 
       def services(arg = nil)
-        set_or_return(:services, arg, :kind_of => String, :default => 'data,query,index')
+        set_or_return(:services, arg, :kind_of => String, :default => 'kv,index,n1ql')
       end
 
       def initialize(*)
