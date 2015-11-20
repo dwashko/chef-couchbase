@@ -28,4 +28,13 @@ describe 'couchbase::moxi' do
     expect(chef_run).to start_service('moxi-server')
     expect(chef_run).to_not start_service('not_moxi-server')
   end
+
+  it 'downloads moxi-server-x86_64_1.8.1.rpm' do
+    expect(chef_run).to create_remote_file_if_missing('/var/chef/cache/moxi-server_x86_64_1.8.1.rpm')
+  end
+
+  it 'installs rpm package moxi-server-x86_64_1.8.1.rpm' do
+    expect(chef_run).to install_rpm_package('/var/chef/cache/moxi-server_x86_64_1.8.1.rpm')
+  end
+
 end

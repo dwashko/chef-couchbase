@@ -1,3 +1,7 @@
+# 3.0.2
+-------
+[dwashko] - updating spec tests
+
 # 3.0.1
 -------
 [dwashko] - Separating index ram size from memory_quota_mb

@@ -8,6 +8,7 @@ RSpec.configure do |config|
   config.log_level = :error
   config.platform = 'centos'
   config.version = '6.5'
+  config.file_cache_path = '/var/chef/cache'
   config.color = true
   config.tty = true
   config.formatter = :documentation
