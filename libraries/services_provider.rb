@@ -18,16 +18,12 @@ class Chef
       end
 
       def action_set_services
-        Chef::Log.warn("setting servicesto ")
         Chef::Log.warn(@new_resource.services)
         return if @current_resource.exists
-        post "/node/controller/setupServices", 'services' => @new_resource.services
+        post '/node/controller/setupServices', 'services' => @new_resource.services
         @new_resource.updated_by_last_action true
         Chef::Log.info "#{@new_resource} modified"
       end
-
-      private
-
     end
   end
 end

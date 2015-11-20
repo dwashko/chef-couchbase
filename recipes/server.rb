@@ -105,7 +105,7 @@ end
 couchbase_node 'self' do
   database_path node['couchbase']['server']['database_path']
   index_path node['couchbase']['server']['index_path']
-  retry_delay 30 
+  retry_delay 30
   retries 4
 
   username node['couchbase']['server']['username']

@@ -23,12 +23,12 @@ describe 'couchbase::server' do
     expect(chef_run).to create_directory('/opt/couchbase/var/lib/couchbase/data').with(user: 'couchbase')
   end
 
-  it 'downloads /var/chef/cache/couchbase-server-community-3.0.1-centos6.x86_64.rpm' do
-    expect(chef_run).to create_remote_file_if_missing('/var/chef/cache/couchbase-server-community-3.0.1-centos6.x86_64.rpm') 
+  it 'downloads /var/chef/cache/couchbase-server-community-4.0.0-centos6.x86_64.rpm' do
+    expect(chef_run).to create_remote_file_if_missing('/var/chef/cache/couchbase-server-community-4.0.0-centos6.x86_64.rpm') 
   end
 
-  it 'installs rpm /var/chef/cache/couchbase-server-community-3.0.1-centos6.x86_64.rpm' do
-    expect(chef_run).to install_rpm_package('/var/chef/cache/couchbase-server-community-3.0.1-centos6.x86_64.rpm')
+  it 'installs rpm /var/chef/cache/couchbase-server-community-4.0.0-centos6.x86_64.rpm' do
+    expect(chef_run).to install_rpm_package('/var/chef/cache/couchbase-server-community-4.0.0-centos6.x86_64.rpm')
   end
 
   it 'rewrites couchbase log_dir config' do

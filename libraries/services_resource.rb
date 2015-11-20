@@ -4,7 +4,7 @@ require File.join(File.dirname(__FILE__), 'credentials_attributes')
 class Chef
   class Resource
     # Provices Class CouchbaseNode < Resource
-    class CouchbaseServices< Resource
+    class CouchbaseServices < Resource
       include Couchbase::CredentialsAttributes
 
       def id(arg = nil)

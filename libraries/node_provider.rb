@@ -19,7 +19,7 @@ class Chef
       def action_modify
         return unless @current_resource.database_path != @new_resource.database_path || @current_resource.index_path != @new_resource.index_path
         post "/nodes/#{@new_resource.id}/controller/settings", 'path' => @new_resource.database_path,
-        'index_path' => @new_resource.index_path
+                                                               'index_path' => @new_resource.index_path
         @new_resource.updated_by_last_action true
         Chef::Log.info "#{@new_resource} modified"
       end
