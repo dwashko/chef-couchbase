@@ -60,7 +60,7 @@ if version > 3
   couchbase_services 'self' do
     services node['couchbase']['server']['services']
     retry_delay 30
-    retries 1
+    retries 4
     username node['couchbase']['server']['username']
     password node['couchbase']['server']['password']
   end
@@ -106,7 +106,7 @@ couchbase_node 'self' do
   database_path node['couchbase']['server']['database_path']
   index_path node['couchbase']['server']['index_path']
   retry_delay 30 
-  retries 6
+  retries 4
 
   username node['couchbase']['server']['username']
   password node['couchbase']['server']['password']
