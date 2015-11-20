@@ -15,6 +15,10 @@ class Chef
         set_or_return(:services, arg, :kind_of => String, :default => 'kv,index,n1ql')
       end
 
+      def exists(arg = nil)
+        set_or_return(:exists, arg, :kind_of => [TrueClass, FalseClass], :required => true, :default => false)
+      end
+
       def initialize(*)
         super
         @action = :set_services
