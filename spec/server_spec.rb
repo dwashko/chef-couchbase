@@ -36,7 +36,7 @@ describe 'couchbase::server' do
   end
 
   it 'runs write_services api call' do
-    expect(chef_run).to set_couchbase_services('self')
+    expect(chef_run).to write_couchbase_services('self')
   end
 
   it 'modifies node' do
