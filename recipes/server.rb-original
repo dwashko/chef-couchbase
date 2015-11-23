@@ -54,6 +54,18 @@ service 'couchbase-server' do
   action [:enable, :start]
 end
 
+version =  node['couchbase']['server']['version'].split('.').first.to_i
+
+if version > 3
+  couchbase_services 'self' do
+    services node['couchbase']['server']['services']
+    retry_delay 30
+    retries 4
+    username node['couchbase']['server']['username']
+    password node['couchbase']['server']['password']
+  end
+end
+
 directory node['couchbase']['server']['log_dir'] do
   owner 'couchbase'
   group 'couchbase'
@@ -100,8 +112,25 @@ couchbase_node 'self' do
   password node['couchbase']['server']['password']
 end
 
-if node['couchbase']['server']['setup_cluster'] && node['couchbase']['server']['cluster_master'] != node['ipaddress']
-  include_recipe 'couchbase::setup_cluster'
-else
-  include_recipe 'couchbase::setup_server'
+couchbase_settings 'web' do
+  settings('username' => node['couchbase']['server']['username'],
+           'password' => node['couchbase']['server']['password'],
+           'port' => 8091)
+
+  username node['couchbase']['server']['username']
+  password node['couchbase']['server']['password']
+end
+
+couchbase_cluster 'default' do
+  memory_quota_mb node['couchbase']['server']['memory_quota_mb']
+
+  username node['couchbase']['server']['username']
+  password node['couchbase']['server']['password']
+end
+
+couchbase_pool 'default' do
+  memory_quota_mb node['couchbase']['server']['memory_quota_mb']
+
+  username node['couchbase']['server']['username']
+  password node['couchbase']['server']['password']
 end

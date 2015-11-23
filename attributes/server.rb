@@ -62,5 +62,7 @@ default['couchbase']['server']['log_dir'] = File.join(node['couchbase']['server'
 
 default['couchbase']['server']['source']['bucket'] = 'default'
 default['couchbase']['server']['remote']['bucket'] = 'default'
+default['couchbase']['server']['setup_cluster'] = false
 default['couchbase']['server']['cluster_name'] = 'west_cluster'
 default['couchbase']['server']['remote_cluster'] = 'remote_cluster'
+default['couchbase']['server']['cluster_master'] = nil
