@@ -1,3 +1,7 @@
+# 4.0.1
+-------
+[dwashko] - Major updates to server recipe to bring it in line with 4.0. Added spec matchers.
+
 # 3.0.2
 -------
 [dwashko] - updating spec tests
