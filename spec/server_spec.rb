@@ -7,6 +7,8 @@ describe 'couchbase::server' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new do |node|
       stub_command("grep '{error_logger_mf_dir, \"/opt/couchbase/var/lib/couchbase/logs\"}.' /opt/couchbase/etc/couchbase/static_config").and_return(0)
+      node.set['ipaddress'] = '10.0.0.1'
+      node.set['couchbase']['server']['cluster_master'] = '10.0.0.1'
     end.converge(described_recipe)
   end
 

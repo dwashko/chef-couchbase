@@ -100,7 +100,7 @@ couchbase_node 'self' do
   password node['couchbase']['server']['password']
 end
 
-if node['couchbase']['server']['setup_cluster'] && node['couchbase']['server']['cluster_master'] != node['ipaddress']
+if node['couchbase']['server']['setup_cluster'] 
   include_recipe 'couchbase::setup_cluster'
 else
   include_recipe 'couchbase::setup_server'
