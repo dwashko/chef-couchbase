@@ -1,5 +1,5 @@
 if defined?(ChefSpec)
-  def set_couchbase_services(resource)
+  def write_couchbase_services(resource)
     ChefSpec::Matchers::ResourceMatcher.new(:couchbase_services, :set_services, resource)
   end
 

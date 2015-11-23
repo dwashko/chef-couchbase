@@ -35,7 +35,7 @@ describe 'couchbase::server' do
     expect(chef_run).to_not run_ruby_block('rewrite_couchbase_log_dir_config')
   end
 
-  it 'runs set_services api call' do
+  it 'runs write_services api call' do
     expect(chef_run).to set_couchbase_services('self')
   end
 
