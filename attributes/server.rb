@@ -8,7 +8,9 @@ default['couchbase']['server']['password'] = 'password'
 # default['couchbase']['server']['memory_quota_mb'] = Couchbase::MaxMemoryQuotaCalculator.from_node(node).in_megabytes
 default['couchbase']['server']['memory_quota_mb'] = 4000
 default['couchbase']['server']['index_memory_quota_mb'] = 256
-default['couchbase']['server']['services'] = 'kv,n1ql,index'
+#default['couchbase']['server']['services'] = 'kv,n1ql,index'
+default['couchbase']['server']['services'] = 'data,query,index'
+
 default['couchbase']['server']['port'] = 8091
 
 case node['platform']
