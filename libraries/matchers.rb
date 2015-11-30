@@ -19,4 +19,11 @@ if defined?(ChefSpec)
     ChefSpec::Matchers::ResourceMatcher.new(:couchbase_pool, :modify_if_existing, resource)
   end
 
+  def couchbase_node_directories(resource)
+    ChefSpec::Matchers::ResourceMatcher.new(:couchbase_node_directories, :add, resource)
+  end
+
+  def couchbase_cluster_init(resource)
+    ChefSpec::Matchers::ResourceMatcher.new(:couchbase_cluster_init, :init, resource)
+  end
 end
