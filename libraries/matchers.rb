@@ -19,6 +19,10 @@ if defined?(ChefSpec)
     ChefSpec::Matchers::ResourceMatcher.new(:couchbase_pool, :modify_if_existing, resource)
   end
 
+  def couchbase_install_server(resource)
+    ChefSpec::Matchers::ResourceMatcher.new(:couchbase_install_server, :install, resource)
+  end
+
   def couchbase_node_directories(resource)
     ChefSpec::Matchers::ResourceMatcher.new(:couchbase_node_directories, :add, resource)
   end

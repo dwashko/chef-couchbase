@@ -24,19 +24,9 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-remote_file File.join(Chef::Config[:file_cache_path], node['couchbase']['server']['package_file']) do
-  source node['couchbase']['server']['package_full_url']
-  action :create_if_missing
-end
-case node['platform'] 
-when 'windows'
-  include_recipe 'couchbase::_install_windows'
-when 'debian','ubuntu','redhat','centos','scientific','amazon','fedora'
-  include_recipe 'couchbase::_install_linux'
-else
-  log 'Your OS is not supported by this cookbook' do
-    level :fatal
-  end
+couchbase_install_server 'self' do
+  version node['couchbase']['server']['version']
+  edition node['couchbase']['server']['edition']
 end
 
 service 'couchbase-server' do

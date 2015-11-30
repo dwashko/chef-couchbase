@@ -12,6 +12,10 @@ describe 'couchbase::server2' do
     end.converge(described_recipe)
   end
 
+  it 'runs install server resource' do
+    expect(chef_run).to couchbase_install_server('self')
+  end
+
   it 'enables and starts couchbase-server' do
     expect(chef_run).to enable_service('couchbase-server')
     expect(chef_run).to start_service('couchbase-server')
@@ -23,10 +27,6 @@ describe 'couchbase::server2' do
 
   it 'creates directory /opt/couchbase/var/lib/couchbase/data' do
     expect(chef_run).to create_directory('/opt/couchbase/var/lib/couchbase/data').with(user: 'couchbase')
-  end
-
-  it 'downloads /var/chef/cache/couchbase-server-community-4.0.0-centos6.x86_64.rpm' do
-    expect(chef_run).to create_remote_file_if_missing('/var/chef/cache/couchbase-server-community-4.0.0-centos6.x86_64.rpm') 
   end
 
   it 'rewrites couchbase log_dir config' do
