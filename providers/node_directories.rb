@@ -37,13 +37,15 @@ end
 action :add do
   couch_up(new_resource.install_path, new_resource.username, new_resource.password)
 
-  cmd = "#{new_resource.install_path}/bin/couchbase-cli node-init -c 127.0.0.1:8091 \
-         -u #{new_resource.username} \
-         -p #{new_resource.password} \
-         --node-init-data-path=#{new_resource.database_path} \
-         --node-init-index-path=#{new_resource.index_path}"
-  execute "node-init set data and index paths" do
-    sensitive true
-    command cmd
+  if check_cluster(new_resource.username, new_resource.password) == false
+    cmd = "#{new_resource.install_path}/bin/couchbase-cli node-init -c 127.0.0.1:8091 \
+           -u #{new_resource.username} \
+           -p #{new_resource.password} \
+           --node-init-data-path=#{new_resource.database_path} \
+           --node-init-index-path=#{new_resource.index_path}"
+    execute "node-init set data and index paths" do
+      sensitive true
+      command cmd
+    end
   end
 end

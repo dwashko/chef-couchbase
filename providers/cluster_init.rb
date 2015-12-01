@@ -20,7 +20,7 @@
 use_inline_resources
 
 action :init do
-
+  return unless check_cluster(new_resource.username, new_resource.password) == false
   cmd = "#{new_resource.install_path}/bin/couchbase-cli cluster-init -c 127.0.0.1:8091 \
          -u #{new_resource.username} \
          -p #{new_resource.password} \
