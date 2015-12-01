@@ -78,7 +78,7 @@ couchbase_node_directories 'self' do
   install_path node['couchbase']['server']['install_dir']
 end
 
-version =  node['couchbase']['server']['version'].split('.').first.to_i
+version = node['couchbase']['server']['version'].split('.').first.to_i
 
 couchbase_cluster_init 'self' do
   services node['couchbase']['server']['services']

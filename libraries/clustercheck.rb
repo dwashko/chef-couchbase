@@ -39,7 +39,7 @@ def not_in_cluster(jvalue, selfipaddress)
   true
 end
 
-# build a hash of known nodes including port. 
+# build a hash of known nodes including port.
 # Default prefix needs to be added here to make things easier.
 # Default prefix is ns_1@
 def get_known_nodes_from_json(jvalue)

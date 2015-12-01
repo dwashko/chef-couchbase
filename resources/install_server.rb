@@ -19,7 +19,7 @@
 
 actions :install
 
-attribute :version, :kind_of => String 
+attribute :version, :kind_of => String
 attribute :edition, :kind_of => String
 
 def initialize(*args)

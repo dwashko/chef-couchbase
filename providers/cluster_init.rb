@@ -34,8 +34,8 @@ action :init do
   end
 
   Chef::Log.warn("command is #{cmd}")
-  execute "cluster init to initialize server" do
-    sensitive false 
+  execute 'cluster init to initialize server' do
+    sensitive false
     command cmd
   end
 end

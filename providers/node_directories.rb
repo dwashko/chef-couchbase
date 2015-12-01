@@ -18,20 +18,19 @@
 #
 
 use_inline_resources
+require 'English'
 
 def couch_up(path, username, password)
-  Chef::Log.warn("running couch up")
-  # cmd = "#{path}/bin/couchbase-cli server-info -c 127.0.0.1:8091 -u #{username} -p #{password} > /dev/null ; echo $?"
   i = 0
   while i < 3
-    `#{path}/bin/couchbase-cli server-info -c 127.0.0.1:8091 -u #{username} -p #{password} > /dev/null`; ready=$?.success?
+    `#{path}/bin/couchbase-cli server-info -c 127.0.0.1:8091 -u #{username} -p #{password} > /dev/null`
+    ready = $CHILD_STATUS.success?
     Chef::Log.warn("is server up? #{ready}")
-    ready.class
     return if ready == true
     i += 1
     sleep 10
   end
-  Chef::Application.fatal!("Couchbase server has not come up within 30 seconds cannot continue") 
+  Chef::Application.fatal!('Couchbase server has not come up within 30 seconds cannot continue')
 end
 
 action :add do
@@ -43,7 +42,7 @@ action :add do
            -p #{new_resource.password} \
            --node-init-data-path=#{new_resource.database_path} \
            --node-init-index-path=#{new_resource.index_path}"
-    execute "node-init set data and index paths" do
+    execute 'node-init set data and index paths' do
       sensitive true
       command cmd
     end

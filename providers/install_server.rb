@@ -20,7 +20,7 @@
 use_inline_resources
 
 def build_rpm_name(version, edition)
-  arch = node['kernel']['machine'] =='x86_64' ? 'x86_64' : 'x86'
+  arch = node['kernel']['machine'] == 'x86_64' ? 'x86_64' : 'x86'
   if version < '3.0.0'
     return "couchbase-server-#{edition}_#{version}_#{arch}.rpm"
   else
@@ -45,22 +45,22 @@ def build_deb_name(version, edition)
   end
 end
 
-def build_windows_name(version, edition)  
+def build_windows_name(version, edition)
   arch = node['kernel']['machine'] == 'x86_64' ? 'amd64' : 'x86'
   if version < '3.0.1'
     Chef::Log.error("Couchbase Servers version #{version} is not available for Windows")
   end
-  return "couchbase-server-#{edition}_#{version}-windows_#{arch}.exe"
+  "couchbase-server-#{edition}_#{version}-windows_#{arch}.exe"
 end
 
 def get_file_name(version, edition)
   case node['platform']
   when 'debian', 'ubuntu'
-    return build_deb_name(new_resource.version, new_resource.edition)
+    return build_deb_name(version, edition)
   when 'centos', 'redhat', 'scientific', 'amazon'
-    return build_rpm_name(new_resource.version, new_resource.edition)
+    return build_rpm_name(version, edition)
   when 'windows'
-    return  build_windows_name(new_resource.version, new_resource.edition)
+    return build_windows_name(version, edition)
   else
     Chef::Log.error("Couchbase server not supported on #{node['platform']}")
   end
@@ -86,12 +86,11 @@ def install_package(package)
     end
 
   else
-    Chef::Log.error("Not sure how we got here but there is now way to install the package")
+    Chef::Log.error('Not sure how we got here but there is now way to install the package')
   end
 end
 
 action :install do
-
   package_file = get_file_name(new_resource.version, new_resource.edition)
   url_base = "http://packages.couchbase.com/releases/#{new_resource.version}"
 
@@ -106,5 +105,4 @@ action :install do
   end
 
   install_package(package_path)
-
 end

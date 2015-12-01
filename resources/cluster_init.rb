@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: couchbase
-# Resource:: cluster_init 
+# Resource:: cluster_init
 #
 # Copyright 2015, GannettDigital
 #
@@ -20,9 +20,9 @@
 actions :init
 
 attribute :services, :kind_of => String
-attribute :ramsize, :kind_of => Integer 
+attribute :ramsize, :kind_of => Integer
 attribute :index_ramsize, :kind_of => Integer
-attribute :version, :kind_of => Integer 
+attribute :version, :kind_of => Integer
 attribute :username, :kind_of => String
 attribute :password, :kind_of => String
 attribute :install_path, :kind_of => String
