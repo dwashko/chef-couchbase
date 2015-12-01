@@ -31,17 +31,21 @@ end
 def build_deb_name(version, edition)
   arch = node['kernel']['machine'] == 'x86_64' ? 'amd64' : 'x86'
   if node['platform'] == 'ubuntu'
-    if version < '3.0.0'
-      return "couchbase-server-#{edition}_#{version}_{arch}.deb"
-    else
-      return "couchbase-server-#{edition}_#{version}-ubuntu12.04_#{arch}.deb"
-    end
+    return build_ubuntu_name(version, edition, arch)
   else
     if version < '3.0.0'
       Chef::Log.warn("Couchbase Server does not have a Debian release for #{version}")
     else
       return "couchbase-server-#{edition}_#{version}-debian7_#{arch}"
     end
+  end
+end
+
+def build_ubuntu_name(version, edition, arch)
+  if version < '3.0.0'
+    return "couchbase-server-#{edition}_#{version}_{arch}.deb"
+  else
+    return "couchbase-server-#{edition}_#{version}-ubuntu12.04_#{arch}.deb"
   end
 end
 
@@ -73,20 +77,22 @@ def install_package(package)
   when 'centos', 'redhat', 'scientific', 'amazon'
     rpm_package package
   when 'windows'
-    template "#{Chef::Config[:file_cache_path]}/setup.iss" do
-      source 'setup.iss.erb'
-      action :create
-    end
-
-    windows_package 'Couchbase Server' do
-      source package
-      options '/s'
-      installer_type :custom
-      action :install
-    end
-
+    install_windows(package)
   else
     Chef::Log.error('Not sure how we got here but there is now way to install the package')
+  end
+end
+
+def install_windows(package)
+  template "#{Chef::Config[:file_cache_path]}/setup.iss" do
+    source 'setup.iss.erb'
+    action :create
+  end
+  windows_package 'Couchbase Server' do
+    source package
+    options '/s'
+    installer_type :custom
+    action :install
   end
 end
 

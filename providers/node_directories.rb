@@ -23,9 +23,9 @@ require 'English'
 def couch_up(path, username, password)
   i = 0
   while i < 3
-    `#{path}/bin/couchbase-cli server-info -c 127.0.0.1:8091 -u #{username} -p #{password} > /dev/null`
+    cmd = Mixlib::ShellOut.new("#{path}/bin/couchbase-cli server-info -c 127.0.0.1:8091 -u #{username} -p #{password} > /dev/null")
+    cmd.run_command
     ready = $CHILD_STATUS.success?
-    Chef::Log.warn("is server up? #{ready}")
     return if ready == true
     i += 1
     sleep 10
