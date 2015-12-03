@@ -21,13 +21,14 @@ use_inline_resources
 
 action :init do
   return unless check_cluster(new_resource.username, new_resource.password) == false
+  version = new_resource.version.split('.').first.to_i
   cmd = "#{new_resource.install_path}/bin/couchbase-cli cluster-init -c 127.0.0.1:8091 \
          -u #{new_resource.username} \
          -p #{new_resource.password} \
          --cluster-username=#{new_resource.username} \
          --cluster-password=#{new_resource.password} \
          --cluster-ramsize=#{new_resource.ramsize}"
-  if new_resource.version > 3
+  if version > 3
     cmd = "#{cmd} \
            --cluster-index-ramsize=#{new_resource.index_ramsize} \
            --services=#{new_resource.services}"

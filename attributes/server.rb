@@ -9,6 +9,7 @@ default['couchbase']['server']['password'] = 'password'
 default['couchbase']['server']['memory_quota_mb'] = 4000
 default['couchbase']['server']['index_memory_quota_mb'] = 256
 default['couchbase']['server']['services'] = 'data,query,index'
+default['couchbase']['server']['services_api'] = 'kv,n1ql,index'
 
 default['couchbase']['server']['port'] = 8091
 
@@ -64,6 +65,7 @@ default['couchbase']['server']['log_dir'] = File.join(node['couchbase']['server'
 default['couchbase']['server']['source']['bucket'] = 'default'
 default['couchbase']['server']['remote']['bucket'] = 'default'
 default['couchbase']['server']['setup_cluster'] = false
+default['couchbase']['server']['run_cluster_init'] = true
 default['couchbase']['server']['cluster_name'] = 'west_cluster'
 default['couchbase']['server']['remote_cluster'] = 'remote_cluster'
 default['couchbase']['server']['cluster_master'] = nil

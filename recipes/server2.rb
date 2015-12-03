@@ -77,14 +77,15 @@ couchbase_node_directories 'self' do
   install_path node['couchbase']['server']['install_dir']
 end
 
-version = node['couchbase']['server']['version'].split('.').first.to_i
+# version = node['couchbase']['server']['version'].split('.').first.to_i
 
 couchbase_cluster_init 'self' do
   services node['couchbase']['server']['services']
-  version version
+  version node['couchbase']['server']['version']
   ramsize node['couchbase']['server']['memory_quota_mb']
   index_ramsize node['couchbase']['server']['index_memory_quota_mb']
   username node['couchbase']['server']['username']
   password node['couchbase']['server']['password']
   install_path node['couchbase']['server']['install_dir']
+  only_if { node['couchbase']['server']['run_cluster_init'] == true }
 end

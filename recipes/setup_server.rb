@@ -28,7 +28,7 @@ version =  node['couchbase']['server']['version'].split('.').first.to_i
 
 if version > 3
   couchbase_services 'self' do
-    services node['couchbase']['server']['services']
+    services node['couchbase']['server']['services_api']
     retry_delay 30
     retries 4
     username node['couchbase']['server']['username']
