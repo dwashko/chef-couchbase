@@ -1,6 +1,6 @@
 # 4.0.1
 -------
-[dwashko] - Major updates to server recipe to bring it in line with 4.0. Added spec matchers.
+[dwashko] - Major updates to server recipe to bring it in line with 4.0. Added spec matchers. Inclusion of new server2.rb recipe and associated resources and libraries. Reworked client recipe for centos 7.
 
 # 3.0.2
 -------
