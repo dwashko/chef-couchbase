@@ -68,7 +68,7 @@ action :edit do
   command = 'bucket-create' unless check_bucket(new_resource.username, new_resource.password, new_resource.bucket_name) == true
 
   cmd = create_bucket_cmd(command)
-  
+
   cmd_execute(cmd, command)
 end
 
@@ -82,7 +82,6 @@ action :create do
 end
 
 action :delete do
-  
   return unless check_bucket(new_resource.username, new_resource.password, new_resource.bucket_name) == true
   cmd = delete_bucket_cmd
 

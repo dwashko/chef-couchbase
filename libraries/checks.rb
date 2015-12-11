@@ -21,5 +21,4 @@ def check_bucket(username, password, bucket)
   else
     return false
   end
-   
 end

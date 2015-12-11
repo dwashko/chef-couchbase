@@ -25,7 +25,7 @@
 #
 
 couchbase_manage_bucket 'test' do
-  bucket_ramsize 124 
+  bucket_ramsize 124
   bucket_replicas 0
   username node['couchbase']['server']['username']
   password node['couchbase']['server']['password']
