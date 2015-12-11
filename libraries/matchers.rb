@@ -30,4 +30,8 @@ if defined?(ChefSpec)
   def couchbase_cluster_init(resource)
     ChefSpec::Matchers::ResourceMatcher.new(:couchbase_cluster_init, :init, resource)
   end
+
+  def couchbase_install_clientlibrary(resource)
+    ChefSpec::Matchers::ResourceMatcher.new(:couchbase_install_clientlibrary, :install, resource)
+  end
 end
