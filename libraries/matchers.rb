@@ -34,4 +34,16 @@ if defined?(ChefSpec)
   def couchbase_install_clientlibrary(resource)
     ChefSpec::Matchers::ResourceMatcher.new(:couchbase_install_clientlibrary, :install, resource)
   end
+
+  def couchbase_manage_bucket(resource)
+    ChefSpec::Matchers::ResourceMatcher.new(couchbase_manage_bucket, :create, resource)
+  end
+
+  def couchbase_manage_bucket(resource)
+    ChefSpec::Matchers::ResourceMatcher.new(couchbase_manage_bucket, :edit, resource)
+  end
+
+  def couchbase_manage_bucket(resource)
+    ChefSpec::Matchers::ResourceMatcher.new(couchbase_manage_bucket, :delete, resource)
+  end
 end
