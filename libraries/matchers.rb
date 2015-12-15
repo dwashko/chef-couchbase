@@ -46,4 +46,16 @@ if defined?(ChefSpec)
   def couchbase_manage_bucket(resource)
     ChefSpec::Matchers::ResourceMatcher.new(couchbase_manage_bucket, :delete, resource)
   end
+
+  def couchbase_manage_xdcr(resource)
+    ChefSpec::Matchers::ResourceMatcher.new(couchbase_manage_xdcr, :create, resource)
+  end
+
+  def couchbase_manage_xdcr(resource)
+    ChefSpec::Matchers::ResourceMatcher.new(couchbase_manage_xdcr, :delete, resource)
+  end
+
+  def couchbase_manage_xdcr(resource)
+    ChefSpec::Matchers::ResourceMatcher.new(couchbase_manage_xdcr, :replicate, resource)
+  end
 end

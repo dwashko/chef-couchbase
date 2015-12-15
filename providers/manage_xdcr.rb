@@ -51,9 +51,34 @@ action :create do
 end
 
 action :delete do
+  Chef::Log.warn('checking for replication')
+  return unless check_replication(new_resource.username, new_resource.password, new_resource.master_ip, new_resource.remote_cluster_name) == true
+
+  if check_for_bucket_replication(new_resource.username, new_resource.password, new_resource.master_ip, new_resource.install_path) == true
+    Chef::Log.warn('found bucket cannot delete')
+    return
+  end
+
+  Chef::Log.warn('found replication')
+  options = "-u #{new_resource.username} \
+             -p #{new_resource.password} \
+             --xdcr-cluster-name=#{new_resource.remote_cluster_name}"
+
+  cmd = xdcr_setup_command('delete', new_resource.master_ip, options)
+
+  execute 'delete xdcr replication' do
+    sensitive false
+    command cmd
+  end
 end
 
 action :replicate do
+  return if check_bucket_replication(new_resource.username,
+                                     new_resource.password,
+                                     new_resource.master_ip,
+                                     new_resource.install_path,
+                                     new_resource.from_bucket) == true
+
   options = "-u #{new_resource.username} \
              -p #{new_resource.password} \
              --xdcr-cluster-name=#{new_resource.remote_cluster_name} \

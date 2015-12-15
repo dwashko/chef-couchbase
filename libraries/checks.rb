@@ -59,3 +59,18 @@ def check_replication(username, password, ipaddress, replica_name)
   end
   false
 end
+
+def check_bucket_replication(username, password, ipaddress, install_path, bucket)
+  output = `#{install_path}/bin/couchbase-cli xdcr-replicate -c #{ipaddress}:8091 -u #{username} -p #{password} --list | grep source`
+  output.each_line do |line|
+    bucket_name = line.sub(/\s+/, '').sub(/\t/, '').sub(/\n/, '').split(':')
+    return true if bucket_name[1].strip == bucket
+  end
+  false
+end
+
+def check_for_bucket_replication(username, password, ipaddress, install_path)
+  output = `#{install_path}/bin/couchbase-cli xdcr-replicate -c #{ipaddress}:8091 -u #{username} -p #{password} --list`
+  return true if output.length > 1
+  false
+end

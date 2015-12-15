@@ -41,3 +41,10 @@ couchbase_manage_xdcr 'test' do
   to_bucket node['couchbase']['xdcr']['to_bucket']
   action :replicate
 end
+
+# couchbase_manage_xdcr 'test' do
+#  username node['couchbase']['server']['username']
+#  password node['couchbase']['server']['password']
+#  master_ip node['couchbase']['xdcr']['master_ip']
+#  action :delete
+# end
