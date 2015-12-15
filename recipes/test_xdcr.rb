@@ -32,3 +32,12 @@ couchbase_manage_xdcr 'test' do
   replica_username node['couchbase']['server']['username']
   replica_password node['couchbase']['server']['password']
 end
+
+couchbase_manage_xdcr 'test' do
+  username node['couchbase']['server']['username']
+  password node['couchbase']['server']['password']
+  master_ip node['couchbase']['xdcr']['master_ip']
+  from_bucket node['couchbase']['xdcr']['from_bucket']
+  to_bucket node['couchbase']['xdcr']['to_bucket']
+  action :replicate
+end

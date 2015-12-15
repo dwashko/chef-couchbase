@@ -19,8 +19,12 @@
 
 use_inline_resources
 
-def xdcr_command(command, host, options)
+def xdcr_setup_command(command, host, options)
   "#{new_resource.install_path}/bin/couchbase-cli xdcr-setup --#{command} -c #{host}:8091 #{options}"
+end
+
+def xdcr_replicate_command(command, host, options)
+  "#{new_resource.install_path}/bin/couchbase-cli xdcr-replicate --#{command} -c #{host}:8091 #{options}"
 end
 
 action :create do
@@ -38,7 +42,7 @@ action :create do
                --xdcr-certificate=#{new_resource.certificate}"
   end
 
-  cmd = xdcr_command('create', new_resource.master_ip, options)
+  cmd = xdcr_setup_command('create', new_resource.master_ip, options)
 
   execute 'creaet xdcr replication' do
     sensitive false
@@ -50,4 +54,20 @@ action :delete do
 end
 
 action :replicate do
+  options = "-u #{new_resource.username} \
+             -p #{new_resource.password} \
+             --xdcr-cluster-name=#{new_resource.remote_cluster_name} \
+             --xdcr-from-bucket=#{new_resource.from_bucket} \
+             --xdcr-to-bucket=#{new_resource.to_bucket}"
+
+  cmd = xdcr_replicate_command('create', new_resource.master_ip, options)
+
+  begin
+    execute 'replicate buckets' do
+      sensitive false
+      command cmd
+    end
+  rescue # => e
+    return
+  end
 end

@@ -30,6 +30,20 @@ attribute :replica_password, :kind_of => String
 attribute :demand_encryption, :kind_of => [TrueClass, FalseClass], :default => false
 attribute :certificate, :kind_of => String
 
+attribute :from_bucket, :kind_of => String
+attribute :to_bucket, :kind_of => String
+attribute :checkpoint_interval, :kind_of => Integer, :default => 1800
+attribute :worker_batch_size, :kind_of => Integer, :default => 500
+attribute :doc_batch_size, :kind_of => Integer, :default => 2048
+attribute :failure_restart_interval, :kind_of => Integer, :default => 30
+attribute :optimistic_replication_threshold, :kind_of => Integer, :default => 256
+attribute :source_nozzle_per_node, :kind_of => Integer, :default => 2
+attribute :target_nozzle_per_node, :kind_of => Integer, :default => 2
+attribute :log_level, :kind_of => String, :default => 'Info'
+attribute :stats_interval, :kind_of => Integer, :default => '1000'
+attribute :replication_mode, :kind_of => String, :default => 'xmem'
+attribute :filter_expression_mode, :kind_of => String
+
 def initialize(*args)
   super
   @action = :create
