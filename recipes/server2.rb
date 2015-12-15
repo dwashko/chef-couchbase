@@ -79,7 +79,7 @@ end
 
 # version = node['couchbase']['server']['version'].split('.').first.to_i
 
-couchbase_cluster_init 'self' do
+couchbase_manage_cluster 'self' do
   services node['couchbase']['server']['services']
   version node['couchbase']['server']['version']
   ramsize node['couchbase']['server']['memory_quota_mb']

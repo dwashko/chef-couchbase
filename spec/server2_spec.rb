@@ -37,8 +37,8 @@ describe 'couchbase::server2' do
     expect(chef_run).to couchbase_node_directories('self')
   end
 
-  it 'runs cluster init' do
-    expect(chef_run).to couchbase_cluster_init('self')
+  it 'runs cluster manage to initialize cluster settings' do
+    expect(chef_run).to couchbase_cluster_manage('self')
   end
 
 end

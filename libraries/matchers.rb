@@ -27,8 +27,8 @@ if defined?(ChefSpec)
     ChefSpec::Matchers::ResourceMatcher.new(:couchbase_node_directories, :add, resource)
   end
 
-  def couchbase_cluster_init(resource)
-    ChefSpec::Matchers::ResourceMatcher.new(:couchbase_cluster_init, :init, resource)
+  def couchbase_manage_cluster(resource)
+    ChefSpec::Matchers::ResourceMatcher.new(:couchbase_manage_cluster, :init, resource)
   end
 
   def couchbase_install_clientlibrary(resource)

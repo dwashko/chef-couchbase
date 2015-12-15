@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: couchbase
-# Resource:: cluster_init
+# Resource:: manage_xdcr
 #
 # Copyright 2015, GannettDigital
 #
@@ -17,17 +17,20 @@
 # limitations under the License.
 #
 
-actions :init
+actions :create, :delete, :replicate
 
-attribute :services, :kind_of => String
-attribute :ramsize, :kind_of => Integer
-attribute :index_ramsize, :kind_of => Integer
-attribute :version, :kind_of => String
+attribute :remote_cluster_name, :kind_of => String, :name_attribute => true
 attribute :username, :kind_of => String
 attribute :password, :kind_of => String
-attribute :install_path, :kind_of => String
+attribute :install_path, :kind_of => String, :default => '/opt/couchbase'
+attribute :master_ip, :kind_of => String, :default => '127.0.0.1'
+attribute :replica_ip, :kind_of => String
+attribute :replica_username, :kind_of => String
+attribute :replica_password, :kind_of => String
+attribute :demand_encryption, :kind_of => [TrueClass, FalseClass], :default => false
+attribute :certificate, :kind_of => String
 
 def initialize(*args)
   super
-  @action = :init
+  @action = :create
 end
