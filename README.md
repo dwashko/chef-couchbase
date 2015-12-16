@@ -1,12 +1,12 @@
 DESCRIPTION
 ===========
 
-Installs and configures Couchbase. Will also handle setting up a cluster.
+Installs and configures Couchbase. Also has optional LWRP for setting up a cluster, buckets, and xcdr. Tested with couchbase version 4.
 
 REQUIREMENTS
 ============
 
-Chef 0.10.10 and Ohai 0.6.12 are required due to the use of platform_family.
+Chef 0.12 and Ohai 0.6.12 are required due to the use of platform_family.
 
 Platforms
 ---------
@@ -25,20 +25,18 @@ couchbase-server
 
 * `node['couchbase']['server']['edition']`          - The edition of couchbase-server to install, "community" or "enterprise"
 * `node['couchbase']['server']['version']`          - The version of couchbase-server to install
-* `node['couchbase']['server']['package_file']`     - The couchbase-server package file to download and install
-* `node['couchbase']['server']['package_base_url']` - The url path to download the couchbase-server package file from
-* `node['couchbase']['server']['package_full_url']` - The full url to the couchbase-server package file to download and install
 * `node['couchbase']['server']['database_path']`    - The directory Couchbase should persist data to
+* `node['couchbase']['server']['index_path']`       - The directory Couchbase should persist index to
 * `node['couchbase']['server']['log_dir']`          - The directory Couchbase should log to
-* `node['couchbase']['server']['memory_quota_mb']`  - The per server RAM quota for the entire cluster in megabytes
-                                                      defaults to Couchbase's maximum allowed value
+* `node['couchbase']['server']['memory_quota_mb']`  - The per server RAM quota for data in megabytes
+* `node['couchbase']['server']['index_memory_quota_mb']` - The per server RAM quota for the index in megabytes
+* `node['couchbase']['server']['services']`         - Couchbase 4.0 and up. Services the node should run - data, query, and index 
+                                                      Enterprise can do individual servies, all community nodes must include data
 * `node['couchbase']['server']['username']`         - The cluster's username for the REST API and Admin UI
 * `node['couchbase']['server']['password']`         - The cluster's password for the REST API and Admin UI
-
-client
-------
-
-* `node['couchbase']['client']['version']`          - The version of libcouchbase to install
+* `node['couchbase']['server']['run_cluster_init']` - Boolean whether to initialize the node as a stand alone server.
+                                                      Default is true. Setting go false will require node to be joined to a cluster
+                                                      before it is usable.
 
 moxi
 ----
@@ -53,20 +51,45 @@ moxi
 RECIPES
 =======
 
-client
+client_clibrary
 ------
 
-Installs the libcouchbase2 and devel packages.
+Installs the libcouchbase2 and devel packages for the clibrary.
 
 server
 ------
 
-Installs the couchbase-server package and starts the couchbase-server service.
+Installs the couchbase-server package and starts the couchbase-server service. If run_cluster_init is true (default) will initialize the server.
 
 moxi
 ----
 
 Installs the moxi-server package and starts the moxi-server service.
+
+test_join_cluster
+-----------------
+
+Example recipe to join nodes into a cluster.
+
+test_leave_cluster
+------------------
+
+Example recipe to remove a node from a cluster.
+
+test_bucket_create
+------------------
+
+Example recipe to add a bucket to the cluster.
+
+test_xdcr_create
+----------------
+
+Example recipe to establish xdcr between two cluster and replicate a bucket.
+
+test_xdcr_delete
+----------------
+
+Example recipe to delete bucket replication and xdcr between two clusters.
 
 RESOURCES/PROVIDERS
 ===================

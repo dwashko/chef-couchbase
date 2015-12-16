@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: couchbase
-# Recipe:: test_buckets2
+# Recipe:: test_bucket_create
 #
 # Copyright 2012, getaroom
 #
