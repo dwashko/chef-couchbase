@@ -26,8 +26,8 @@ default['couchbase']['server']['database_path'] = File.join(node['couchbase']['s
 default['couchbase']['server']['index_path'] = File.join(node['couchbase']['server']['install_dir'], 'var', 'lib', 'couchbase', 'data')
 default['couchbase']['server']['log_dir'] = File.join(node['couchbase']['server']['install_dir'], 'var', 'lib', 'couchbase', 'logs')
 
-default['couchbase']['server']['setup_cluster'] = false
+# default['couchbase']['server']['setup_cluster'] = false
 default['couchbase']['server']['run_cluster_init'] = true
-default['couchbase']['server']['cluster_name'] = 'west_cluster'
-default['couchbase']['server']['remote_cluster'] = 'remote_cluster'
-default['couchbase']['server']['cluster_master'] = nil
+# default['couchbase']['server']['cluster_name'] = 'west_cluster'
+# default['couchbase']['server']['remote_cluster'] = 'remote_cluster'
+# default['couchbase']['server']['cluster_master'] = nil
