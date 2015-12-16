@@ -1,6 +1,6 @@
-# 4.0.1
+# 4.0.0
 -------
-[dwashko] - Major updates to server recipe to bring it in line with 4.0. Added spec matchers. Inclusion of new server2.rb recipe and associated resources and libraries. Reworked client recipe for centos 7.
+[dwashko] - Rewrite of LWRP for managing everything. Support for couchbase 4.0 and above.
 
 # 3.0.2
 -------

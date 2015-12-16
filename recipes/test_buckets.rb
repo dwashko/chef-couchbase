@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: couchbase
-# Recipe:: test_buckets
+# Recipe:: test_buckets2
 #
 # Copyright 2012, getaroom
 #
@@ -24,61 +24,10 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-couchbase_bucket 'default' do
-  memory_quota_mb 100
-
+couchbase_manage_bucket 'test' do
+  bucket_ramsize 124
+  bucket_replicas 0
   username node['couchbase']['server']['username']
   password node['couchbase']['server']['password']
-end
-
-couchbase_bucket 'memcached' do
-  memory_quota_mb 100
-  type 'memcached'
-
-  username node['couchbase']['server']['username']
-  password node['couchbase']['server']['password']
-end
-
-couchbase_bucket 'modified mb creation' do
-  bucket 'modified_mb'
-  type 'couchbase'
-  memory_quota_mb 100
-  replicas false
-
-  username node['couchbase']['server']['username']
-  password node['couchbase']['server']['password']
-end
-
-couchbase_bucket 'modified % creation' do
-  bucket 'modified_percent'
-  type 'couchbase'
-  memory_quota_percent 0.1
-
-  username node['couchbase']['server']['username']
-  password node['couchbase']['server']['password']
-end
-
-ruby_block 'wait for bucket creation, which is asynchronous' do
-  block do
-    sleep 2
-  end
-end
-
-couchbase_bucket 'modified mb modification' do
-  bucket 'modified_mb'
-  type 'couchbase'
-  memory_quota_mb 125
-  replicas 2
-
-  username node['couchbase']['server']['username']
-  password node['couchbase']['server']['password']
-end
-
-couchbase_bucket 'modified % modification' do
-  bucket 'modified_percent'
-  type 'couchbase'
-  memory_quota_percent 0.125
-
-  username node['couchbase']['server']['username']
-  password node['couchbase']['server']['password']
+  action :edit
 end
