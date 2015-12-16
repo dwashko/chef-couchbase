@@ -19,12 +19,22 @@
 
 use_inline_resources
 
-def xdcr_setup_command(command, host, options)
-  "#{new_resource.install_path}/bin/couchbase-cli xdcr-setup --#{command} -c #{host}:8091 #{options}"
+def xdcr_setup_command(command, ipaddress, install_path, options)
+  "#{install_path}/bin/couchbase-cli xdcr-setup --#{command} -c #{ipaddress}:8091 #{options}"
 end
 
-def xdcr_replicate_command(command, host, options)
-  "#{new_resource.install_path}/bin/couchbase-cli xdcr-replicate --#{command} -c #{host}:8091 #{options}"
+def xdcr_replicate_command(command, ipaddress, install_path, options)
+  "#{install_path}/bin/couchbase-cli xdcr-replicate --#{command} -c #{ipaddress}:8091 #{options}"
+end
+
+def get_replicate_id(username, password, ipaddress, install_path, bucket)
+  output = `#{install_path}/bin/couchbase-cli xdcr-replicate --list -c #{ipaddress}:8091 \
+         -u #{username} -p #{password} --list| grep #{bucket}|grep stream`
+
+  rep_id = output.sub(/\s+/, '').sub(/\t/, '').sub(/\n/, '').split(':')
+  # id = rep_id[1].split('/')
+  # Chef::Log.warn("id is #{id[0].strip}")
+  rep_id[1].strip
 end
 
 action :create do
@@ -42,7 +52,7 @@ action :create do
                --xdcr-certificate=#{new_resource.certificate}"
   end
 
-  cmd = xdcr_setup_command('create', new_resource.master_ip, options)
+  cmd = xdcr_setup_command('create', new_resource.master_ip, new_resource.install_path, options)
 
   execute 'creaet xdcr replication' do
     sensitive false
@@ -64,7 +74,7 @@ action :delete do
              -p #{new_resource.password} \
              --xdcr-cluster-name=#{new_resource.remote_cluster_name}"
 
-  cmd = xdcr_setup_command('delete', new_resource.master_ip, options)
+  cmd = xdcr_setup_command('delete', new_resource.master_ip, new_resource.install_path, options)
 
   execute 'delete xdcr replication' do
     sensitive false
@@ -85,14 +95,35 @@ action :replicate do
              --xdcr-from-bucket=#{new_resource.from_bucket} \
              --xdcr-to-bucket=#{new_resource.to_bucket}"
 
-  cmd = xdcr_replicate_command('create', new_resource.master_ip, options)
+  cmd = xdcr_replicate_command('create', new_resource.master_ip, new_resource.install_path, options)
 
-  begin
-    execute 'replicate buckets' do
-      sensitive false
-      command cmd
-    end
-  rescue # => e
-    return
+  execute 'replicate buckets' do
+    sensitive false
+    command cmd
+  end
+end
+
+action :delete_replicate do
+  return if check_bucket_replication(new_resource.username,
+                                     new_resource.password,
+                                     new_resource.master_ip,
+                                     new_resource.install_path,
+                                     new_resource.from_bucket) == false
+  replicate_id = get_replicate_id(new_resource.username,
+                                  new_resource.password,
+                                  new_resource.master_ip,
+                                  new_resource.install_path,
+                                  new_resource.from_bucket)
+
+  options = "-u #{new_resource.username} \
+             -p #{new_resource.password} \
+             --xdcr-cluster-name=#{new_resource.remote_cluster_name} \
+             --xdcr-replicator=#{replicate_id}"
+
+  cmd = xdcr_replicate_command('delete', new_resource.master_ip, new_resource.install_path, options)
+
+  execute 'delete replicate buckets' do
+    sensitive false
+    command cmd
   end
 end

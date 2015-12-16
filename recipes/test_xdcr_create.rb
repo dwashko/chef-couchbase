@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: couchbase
-# Recipe:: test_xdcr
+# Recipe:: test_xdcr_create
 #
 # Copyright 2012, getaroom
 #

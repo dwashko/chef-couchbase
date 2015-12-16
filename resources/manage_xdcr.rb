@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-actions :create, :delete, :replicate
+actions :create, :delete, :replicate, :delete_replicate
 
 attribute :remote_cluster_name, :kind_of => String, :name_attribute => true
 attribute :username, :kind_of => String
