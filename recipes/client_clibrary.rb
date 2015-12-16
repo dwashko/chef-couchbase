@@ -2,7 +2,7 @@
 # Cookbook Name:: couchbase
 # Recipe:: client_clibrary
 #
-# Copyright 2015, Gannett 
+# Copyright 2015, Gannett
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the

@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 default['couchbase']['server']['edition'] = 'community'
 default['couchbase']['server']['version'] = '4.0.0'
 
