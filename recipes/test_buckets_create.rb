@@ -2,7 +2,7 @@
 # Cookbook Name:: couchbase
 # Recipe:: test_bucket_create
 #
-# Copyright 2012, getaroom
+# Copyright 2015, Gannett
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -29,5 +29,4 @@ couchbase_manage_bucket 'test' do
   bucket_replicas 0
   username node['couchbase']['server']['username']
   password node['couchbase']['server']['password']
-  action :edit
 end

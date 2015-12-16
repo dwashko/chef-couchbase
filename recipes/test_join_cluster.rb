@@ -2,7 +2,7 @@
 # Cookbook Name:: couchbase
 # Recipe:: test_join_cluster
 #
-# Copyright 2012, getaroom
+# Copyright 2015, Gannett
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the

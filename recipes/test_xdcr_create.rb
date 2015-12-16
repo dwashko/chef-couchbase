@@ -2,7 +2,7 @@
 # Cookbook Name:: couchbase
 # Recipe:: test_xdcr_create
 #
-# Copyright 2012, getaroom
+# Copyright 2015, Gannett
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -41,10 +41,3 @@ couchbase_manage_xdcr 'test' do
   to_bucket node['couchbase']['xdcr']['to_bucket']
   action :replicate
 end
-
-# couchbase_manage_xdcr 'test' do
-#  username node['couchbase']['server']['username']
-#  password node['couchbase']['server']['password']
-#  master_ip node['couchbase']['xdcr']['master_ip']
-#  action :delete
-# end
