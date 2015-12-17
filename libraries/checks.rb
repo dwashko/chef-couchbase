@@ -61,7 +61,8 @@ def check_replication(username, password, ipaddress, replica_name)
 end
 
 def check_bucket_replication(username, password, ipaddress, install_path, bucket)
-  output = `#{install_path}/bin/couchbase-cli xdcr-replicate -c #{ipaddress}:8091 -u #{username} -p #{password} --list | grep source`
+  output = Mixlib::ShellOut.new("#{install_path}/bin/couchbase-cli xdcr-replicate -c #{ipaddress}:8091 -u #{username} -p #{password} --list | grep source")
+  output.run_command
   output.each_line do |line|
     bucket_name = line.sub(/\s+/, '').sub(/\t/, '').sub(/\n/, '').split(':')
     return true if bucket_name[1].strip == bucket
@@ -70,7 +71,8 @@ def check_bucket_replication(username, password, ipaddress, install_path, bucket
 end
 
 def check_for_bucket_replication(username, password, ipaddress, install_path)
-  output = `#{install_path}/bin/couchbase-cli xdcr-replicate -c #{ipaddress}:8091 -u #{username} -p #{password} --list`
+  output = Mixlib::ShellOut("#{install_path}/bin/couchbase-cli xdcr-replicate -c #{ipaddress}:8091 -u #{username} -p #{password} --list")
+  output.run_command
   return true if output.length > 1
   false
 end

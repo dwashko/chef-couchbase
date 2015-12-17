@@ -28,9 +28,9 @@ def xdcr_replicate_command(command, ipaddress, install_path, options)
 end
 
 def get_replicate_id(username, password, ipaddress, install_path, bucket)
-  output = `#{install_path}/bin/couchbase-cli xdcr-replicate --list -c #{ipaddress}:8091 \
-         -u #{username} -p #{password} --list| grep #{bucket}|grep stream`
-
+  output = Mixlib::ShellOut("#{install_path}/bin/couchbase-cli xdcr-replicate --list -c #{ipaddress}:8091 \
+         -u #{username} -p #{password} --list| grep #{bucket}|grep stream")
+  output.run_command
   rep_id = output.sub(/\s+/, '').sub(/\t/, '').sub(/\n/, '').split(':')
   # id = rep_id[1].split('/')
   # Chef::Log.warn("id is #{id[0].strip}")

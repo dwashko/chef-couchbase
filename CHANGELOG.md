@@ -1,3 +1,7 @@
+# 4.0.1
+-------
+[dwasko] - Fixing some style issues reported by food critic.
+
 # 4.0.0
 -------
 [dwashko] - Rewrite of LWRP for managing everything. Support for couchbase 4.0 and above.
