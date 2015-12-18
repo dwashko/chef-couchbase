@@ -66,6 +66,11 @@ moxi
 
 Installs the moxi-server package and starts the moxi-server service.
 
+Fixture Test Cookbook Recipes
+-----------------------------
+
+Examples recipes for cluster management, bucket management, and xdcr can be found under test/fixtures/cookbooks/test.
+
 test_join_cluster
 -----------------
 
