@@ -29,7 +29,7 @@ suites:
   - name: couchbase_client
     data_bags_path: test/integration/data_bags
     run_list:
-      - recipe[couchbase::client_clibrary]
+      - recipe[couchbase::client]
     attributes:
       couchbase:
         server:
