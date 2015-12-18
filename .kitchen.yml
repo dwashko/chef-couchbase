@@ -20,7 +20,6 @@ suites:
     data_bags_path: test/integration/data_bags
     run_list:
       - recipe[couchbase::server]
-      - recipe[couchbase::test_bucket_create]
     attributes:
       couchbase:
         server:

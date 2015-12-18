@@ -1,6 +1,6 @@
 # 4.0.1
 -------
-[dwasko] - Fixing some style issues reported by food critic.
+[dwasko] - Fixing some style issues reported by food critic. Moving test recipes to a fixutre cookbook.
 
 # 4.0.0
 -------
