@@ -79,7 +79,7 @@ def install_package(package)
   when 'windows'
     install_windows(package)
   else
-    Chef::Log.error('Not sure how we got here but there is now way to install the package')
+    Chef::Log.error('Not sure how we got here but there is no way to install the package')
   end
 end
 
