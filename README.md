@@ -170,7 +170,7 @@ couchbase_manage_cluster
 couchbase_manager_cluster "default" do
   services 'data,index,query'
   version '4.0.0'
-  ramesize '2048'
+  ramsize '2048'
   index_ramsize '256'
   username 'Administrator'
   password 'password'
