@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: couchbase
-# Recipe:: client_clibrary
+# Recipe:: client
 #
 # Copyright 2015, Gannett
 #

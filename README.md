@@ -51,10 +51,10 @@ moxi
 RECIPES
 =======
 
-client_clibrary
+client
 ------
 
-Installs the libcouchbase2 and devel packages for the clibrary.
+Installs the libcouchbase2 and devel packages for the c library.
 
 server
 ------
