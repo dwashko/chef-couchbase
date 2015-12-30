@@ -1,3 +1,7 @@
+# 4.0.2
+-------
+[dwashko] - Mistake on how index path is checked and handled.
+
 # 4.0.1
 -------
 [dwasko] - Fixing some style issues reported by food critic. Moving test recipes to a fixutre cookbook. Adding

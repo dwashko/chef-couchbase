@@ -66,7 +66,7 @@ directory node['couchbase']['server']['index_path'] do
   group 'couchbase'
   mode 0755
   recursive true
-  only_if { node['couchbase']['server']['database_path'] == node['couchbase']['server']['index_path'] }
+  only_if { node['couchbase']['server']['database_path'] != node['couchbase']['server']['index_path'] }
 end
 
 couchbase_node_directories 'self' do
