@@ -1,12 +1,12 @@
 DESCRIPTION
 ===========
 
-Installs and configures Couchbase. Will also handle setting up a cluster.
+Installs and configures Couchbase. Also has optional LWRP for setting up a cluster, buckets, and xcdr. Tested with couchbase version 4.
 
 REQUIREMENTS
 ============
 
-Chef 0.10.10 and Ohai 0.6.12 are required due to the use of platform_family.
+Chef 0.12 and Ohai 0.6.12 are required due to the use of platform_family.
 
 Platforms
 ---------
@@ -25,20 +25,18 @@ couchbase-server
 
 * `node['couchbase']['server']['edition']`          - The edition of couchbase-server to install, "community" or "enterprise"
 * `node['couchbase']['server']['version']`          - The version of couchbase-server to install
-* `node['couchbase']['server']['package_file']`     - The couchbase-server package file to download and install
-* `node['couchbase']['server']['package_base_url']` - The url path to download the couchbase-server package file from
-* `node['couchbase']['server']['package_full_url']` - The full url to the couchbase-server package file to download and install
 * `node['couchbase']['server']['database_path']`    - The directory Couchbase should persist data to
+* `node['couchbase']['server']['index_path']`       - The directory Couchbase should persist index to
 * `node['couchbase']['server']['log_dir']`          - The directory Couchbase should log to
-* `node['couchbase']['server']['memory_quota_mb']`  - The per server RAM quota for the entire cluster in megabytes
-                                                      defaults to Couchbase's maximum allowed value
+* `node['couchbase']['server']['memory_quota_mb']`  - The per server RAM quota for data in megabytes
+* `node['couchbase']['server']['index_memory_quota_mb']` - The per server RAM quota for the index in megabytes
+* `node['couchbase']['server']['services']`         - Couchbase 4.0 and up. Services the node should run - data, query, and index 
+                                                      Enterprise can do individual services, all community nodes must include data
 * `node['couchbase']['server']['username']`         - The cluster's username for the REST API and Admin UI
 * `node['couchbase']['server']['password']`         - The cluster's password for the REST API and Admin UI
-
-client
-------
-
-* `node['couchbase']['client']['version']`          - The version of libcouchbase to install
+* `node['couchbase']['server']['run_cluster_init']` - Boolean whether to initialize the node as a stand alone server.
+                                                      Default is true. Setting go false will require node to be joined to a cluster
+                                                      before it is usable.
 
 moxi
 ----
@@ -56,144 +54,278 @@ RECIPES
 client
 ------
 
-Installs the libcouchbase2 and devel packages.
+Installs the libcouchbase2 and devel packages for the c library.
 
 server
 ------
 
-Installs the couchbase-server package and starts the couchbase-server service.
+Installs the couchbase-server package and starts the couchbase-server service. If run_cluster_init is true (default) will initialize the server.
 
 moxi
 ----
 
 Installs the moxi-server package and starts the moxi-server service.
 
+Fixture Test Cookbook Recipes
+-----------------------------
+
+Examples recipes for cluster management, bucket management, and xdcr can be found under test/fixtures/cookbooks/test.
+
+test_join_cluster
+-----------------
+
+Example recipe to join nodes into a cluster.
+
+test_leave_cluster
+------------------
+
+Example recipe to remove a node from a cluster.
+
+test_bucket_create
+------------------
+
+Example recipe to add a bucket to the cluster.
+
+test_xdcr_create
+----------------
+
+Example recipe to establish xdcr between two cluster and replicate a bucket.
+
+test_xdcr_delete
+----------------
+
+Example recipe to delete bucket replication and xdcr between two clusters.
+
 RESOURCES/PROVIDERS
 ===================
 
-couchbase_node
---------------
+couchbase_install_server
+------------------------
 
 ### Actions
 
-* `:modify` - **Default** Modify the configuration of the node
+* `:install` - **Default** Installs couchbase-server from couchbase package repository.
 
 ### Attribute Parameters
 
-* `id` - The id of the Couchbase node, typically "self", defaults to the resource name
-* `database_path` - The directory the Couchbase node should persist data to
-* `username` - The username to use to authenticate with Couchbase
-* `password` - The password to use to authenticate with Couchbase
+* `version` - Version of couchbase to install (i.e.: 4.0.0).
+* `edition` - Either community (default) or enterprise.
 
 ### Examples
 
 ```ruby
-couchbase_node "self" do
-  database_path "/mnt/couchbase-server/data"
-
-  username "Administrator"
-  password "password"
+couchbase_install_server "self" do
+  version '4.0.0'
+  edition 'community'
 end
 ```
 
-couchbase_cluster
------------------
+couchbase_node_diretories
+-------------------------
 
 ### Actions
 
-* `:create_if_missing` - **Default** Create a cluster/pool only if it doesn't exist yet
+* `:add` - **Default** Sets the data and index directories on the node
 
 ### Attribute Parameters
 
-* `cluster` - The id of the Couchbase cluster, typically "default", defaults to the resource name
-* `memory_quota_mb` - The per server RAM quota for the entire cluster in megabytes
+* `database_path` - The path to where database should persist
+* `index_path` - The path to where the index should persist. If not set will default to database_path.
 * `username` - The username to use to authenticate with Couchbase
 * `password` - The password to use to authenticate with Couchbase
+* `install_path` - Path to where couchbase is installed - /opt/couchbase.
 
 ### Examples
 
 ```ruby
-couchbase_cluster "default" do
-  memory_quota_mb 256
-
-  username "Administrator"
-  password "password"
+couchbase_node_directories "self" do
+  database_path '/opt/couchbase/var/lib/couchbase/data'
+  index_path '/opt/couchbase/var/lib/couchbase/index'
+  username 'Administrator'
+  password 'password'
+  install_path '/opt/couchbase'
 end
 ```
 
-couchbase_settings
-------------------
+couchbase_manage_cluster
+------------------------
 
 ### Actions
 
-* `:modify` - **Default** Modify the collection of settings
+* `:init` - **Default** Initialize node setting username and password for web ui.
+* `:join` - Join a node to a cluster.
+* `:leave` - Remove a node from a cluster.
 
 ### Attribute Parameters
 
-* `group` - Which group of settings to modify, defaults to the resource name
-* `settings` - The hash of settings to modify
+* `services` - Version 4 and above. Defines the services the node will perform. One of data, index, query. For community edition every node must have data. This is primarily used when joining a node to a cluster but is required when running init.
+* `ramsize` - Amount of RAM in MB to allocate to data
+* `index_ramsize` - Amount of RAM in MB to allocate to index. If not set index is lumped in with data. 
+* `version` - Version of couchbase. Needed to determine required attributes for 4 and above not supported on 3. Default is 4.0.0.
 * `username` - The username to use to authenticate with Couchbase
 * `password` - The password to use to authenticate with Couchbase
+* `install_path` - Path to where couchbase is installed - /opt/couchbase.
+
+* `master_ip` - Required and used only for :join and :leave. The ip address of the master node in the cluster.
+
 
 ### Examples
 
 ```ruby
-couchbase_settings "autoFailover" do
-  settings({
-    "enabled" => true,
-    "timeout" => 30,
-  })
+couchbase_manager_cluster "default" do
+  services 'data,index,query'
+  version '4.0.0'
+  ramsize '2048'
+  index_ramsize '256'
+  username 'Administrator'
+  password 'password'
+  install_path '/opt/couchbase'
+end
 
-  username "Administrator"
-  password "password"
+couchbase_manager_cluster "default" do
+  services 'data,index'
+  version '4.0.0'
+  username 'Administrator'
+  password 'password'
+  install_path '/opt/couchbase'
+  master_ip '10.20.1.101'
+  action :join
+end
+
+couchbase_manager_cluster "default" do
+  services 'data,index'
+  version '4.0.0'
+  username 'Administrator'
+  password 'password'
+  install_path '/opt/couchbase'
+  master_ip '10.20.1.101'
+  action :leave
 end
 ```
 
-couchbase_bucket
+couchbase_manage_bucket
 ----------------
 
 ### Actions
 
-* `:create` - **Default** Create a Couchbase bucket
+* `:create` - **Default** Create a Couchbase bucket. If you run :create on an exist bucket it switches to edit.
+* `:edit` - Edit settings for a couchbase bucket. If you run :edit on a bucket that does not exist it switches to :create.
+* `:delete` - Delete a couchbase bucket.
 
 ### Attribute Parameters
 
-* `bucket` - The name to use for the Couchbase bucket, defaults to the resource name
-* `cluster` - The name of the cluster the bucket belongs to, defaults to "default"
-* `memory_quota_mb` - The bucket's per server RAM quota for the entire cluster in megabytes
-* `memory_quota_percent` The bucket's RAM quota as a percent (0.0-1.0) of the cluster's quota
-* `replicas` - Number of replica (backup) copies, defaults to 1. Set to false to disable
+* `bucket_name` - The name to use for the Couchbase bucket, defaults to the resource name
+* `bucket_type` - Either couchbase or memcached.
+* `bucket_ramsize` - The bucket's per server RAM quota for the entire cluster in megabytes
+* `bucket_replicas` - Number of replicas, default is 1.
+* `bucket_priority` - Bucket priority compared to other buckets either high or low, default is high.
+* `bucket_password` - Password for bucket - optional, default is nil.
+* `bucket_port` - Default is 11211 for SASL authentication or dedicated port with no password.
+* `bucket_flush` - Enable or disable flush - default is false
+* `bucket_index_replica` - Enable or disable defined number of replicas default is false.
+* `bucketn_enable_priority` - Enables or disables index - default low.
 * `username` - The username to use to authenticate with Couchbase
 * `password` - The password to use to authenticate with Couchbase
+* `install_path - The path to where couchbase is install - default is /opt/couchbase
 
 ### Examples
 
 ```ruby
-couchbase_bucket "default" do
-  memory_quota_mb 128
-  replicas 2
-
-  username "Administrator"
-  password "password"
+couchbase_manage_bucket "test" do
+  bucket_ramsize 128
+  username 'Administrator'
+  password 'password'
 end
 
-couchbase_bucket "pillowfight" do
-  memory_quota_percent 0.5
-  replicas false
+couchbase_manage_bucket "test" do
+  bucket_ramsize 128
+  username 'Administrator'
+  password 'password'
+  action :delete
+end
+```
 
-  username "Administrator"
-  password "password"
+couchbase_manage_xdcr
+---------------------
+
+### Actions
+* `:create` - **Default** Create xdcr replication.
+* `:delete` - Delete xdcr replication - you need to delete buckets replications first.
+* `:replicate` - Create bucket replication.
+* `:delete_replicate` - Delete bucket replication.
+
+### Attribute Parameters
+* `:remote_cluster_name` - Name to give replication, defaults to resource name.
+* `:master_ip` - Ip address or host name of node in cluster to replicate from - master cluster.
+* `:replica_ip` - Ip address or host name of node in cluster to replicate to - replica or slave cluster.
+* `:replica_username` - Username of replica cluster.
+* `:replica_password` - Password for replica cluster.
+* `:demand_encryption` - Use encryption, default to false.
+* `:certificate` - Path to certificate if demand_encryption is true.
+* `username` - The username to use to authenticate with Couchbase
+* `password` - The password to use to authenticate with Couchbase
+* `install_path - The path to where couchbase is install - default is /opt/couchbase
+
+* `:from_bucket` - Name of of bucket to replicate from on master cluster.
+* `:to_bucket` - Name of bucket to replicate to on replica cluster - must exist.
+* `:checkpoint_interval` - Interval between checkpoint in seconds between 60 and 14400, default is 1800.
+* `:worker_batch_size` - Worker batch size in KB between 500 and 10000, default is 500.
+* `:doc_batch_size` - Document batch size in KB between 10 and 100000 KB, default is 2048.
+* `:failure_restart_interval` - Interval for restarting faild XDCR 1 to 300 seconds default is 30.
+* `:optomistic_replication_threshold` - Document body size threshold (bytes) to trigger optimistic replication, default is 256.
+* `:source_nozzle_per_node` - Number of source nozzles per node 1 - 100 default is 2. Should match target_nozzle_per_node.
+* `:target_nozzle_per_node` - Number of outgoing nozzles per node 1 - 100, default is 2. Should match source_nozzles_per_node.
+* `:log_level` - Logging level one of Error, Info, Debug, or Trace, default is Info.
+* `:stats_interval` - Interval in MS for status updates, default is 1000.
+* `:replication_mode` - Replication protocol either version 2 - xmem or version 1 - capi, default is xmem.
+* `:filter_expression_mode` - Option filter expression.
+
+### Examples
+
+```ruby
+couchbase_manage_xdcr 'test' do
+  username 'Administrator'
+  password 'password'
+  replica_ip '10.30.1.101'
+  master_ip '10.20.1.101'
+  replica_username 'Administrator'
+  replica_password 'Password'
+end
+
+couchbase_manage_xdcr 'test' do
+  username 'Administrator'
+  password 'password'
+  master_ip '10.20.1.101'
+  from_bucket 'beer-sample'
+  to_bucket 'beer-sample'
+  action :replicate
+end
+
+couchbase_manage_xdcr 'test' do
+  username 'Administrator'
+  password 'password'
+  master_ip '10.20.1.101'
+  from_bucket 'beer-sample'
+  action :delete_replicate
+end
+
+couchbase_manage_xdcr 'test' do
+  username 'Administrator'
+  password 'password'
+  master_ip '10.20.1.101'
+  action :delete
 end
 ```
 
 LICENSE AND AUTHOR
 ==================
 
+Author:: Dann S Washko (<dwashko@gannett.com>)
 Author:: Chris Griego (<cgriego@getaroom.com>)
 Author:: Morgan Nelson (<mnelson@getaroom.com>)
 Author:: Julian Dunn (<jdunn@aquezada.com>)
 
-Copyright 2012, getaroom
+Copyright 2015, Gannett
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

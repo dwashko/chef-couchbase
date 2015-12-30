@@ -1,3 +1,12 @@
+# 4.0.1
+-------
+[dwasko] - Fixing some style issues reported by food critic. Moving test recipes to a fixutre cookbook. Adding
+           server spec tests for bucket.
+
+# 4.0.0
+-------
+[dwashko] - Rewrite of LWRP for managing everything. Support for couchbase 4.0 and above.
+
 # 3.0.2
 -------
 [dwashko] - updating spec tests

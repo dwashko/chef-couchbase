@@ -1,8 +1,8 @@
 #
 # Cookbook Name:: couchbase
-# Recipe:: test_buckets
+# Recipe:: test_xdcr_create
 #
-# Copyright 2012, getaroom
+# Copyright 2015, Gannett
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -24,61 +24,20 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-couchbase_bucket 'default' do
-  memory_quota_mb 100
-
+couchbase_manage_xdcr 'test' do
   username node['couchbase']['server']['username']
   password node['couchbase']['server']['password']
+  replica_ip node['couchbase']['xdcr']['replica_ip']
+  master_ip node['couchbase']['xdcr']['master_ip']
+  replica_username node['couchbase']['server']['username']
+  replica_password node['couchbase']['server']['password']
 end
 
-couchbase_bucket 'memcached' do
-  memory_quota_mb 100
-  type 'memcached'
-
+couchbase_manage_xdcr 'test' do
   username node['couchbase']['server']['username']
   password node['couchbase']['server']['password']
-end
-
-couchbase_bucket 'modified mb creation' do
-  bucket 'modified_mb'
-  type 'couchbase'
-  memory_quota_mb 100
-  replicas false
-
-  username node['couchbase']['server']['username']
-  password node['couchbase']['server']['password']
-end
-
-couchbase_bucket 'modified % creation' do
-  bucket 'modified_percent'
-  type 'couchbase'
-  memory_quota_percent 0.1
-
-  username node['couchbase']['server']['username']
-  password node['couchbase']['server']['password']
-end
-
-ruby_block 'wait for bucket creation, which is asynchronous' do
-  block do
-    sleep 2
-  end
-end
-
-couchbase_bucket 'modified mb modification' do
-  bucket 'modified_mb'
-  type 'couchbase'
-  memory_quota_mb 125
-  replicas 2
-
-  username node['couchbase']['server']['username']
-  password node['couchbase']['server']['password']
-end
-
-couchbase_bucket 'modified % modification' do
-  bucket 'modified_percent'
-  type 'couchbase'
-  memory_quota_percent 0.125
-
-  username node['couchbase']['server']['username']
-  password node['couchbase']['server']['password']
+  master_ip node['couchbase']['xdcr']['master_ip']
+  from_bucket node['couchbase']['xdcr']['from_bucket']
+  to_bucket node['couchbase']['xdcr']['to_bucket']
+  action :replicate
 end
